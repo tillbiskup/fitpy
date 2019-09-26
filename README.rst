@@ -1,7 +1,7 @@
 FitPy
 =====
 
-FitPy is a Python framework for conveniently handling quantum-chemical calculations and the post-processing of the acquired data.
+FitPy is a Python framework for fitting models to (spectroscopic) data.
 
 For more general information on FitPy see its `homepage <https://www.fitpy.de/>`_.
 

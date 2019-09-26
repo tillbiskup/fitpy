@@ -10,7 +10,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
 setuptools.setup(
     name='fitpy',
     version=version,
-    description='Framework for fitting EPR data.',
+    description='Framework for fitting models to (spectroscopic) data.',
     long_description=readme,
     long_description_content_type='text/x-rst',
     author='Till Biskup',
