@@ -1,0 +1,27 @@
+**pyc
+**swp
+**__pycache__
+**venv
+**config.py
+**.cache
+
+# macOS-specific files
+.DS_Store
+
+#PyCharm project configuration files
+.idea
+
+# Compiled python modules.
+*.pyc
+
+# Setuptools distribution folder.
+/dist/
+/build/
+
+/*.egg-info
+/*.egg
+
+# Sphinx templates and build
+docs/_build
+docs/_static
+docs/_templates
