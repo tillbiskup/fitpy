@@ -26,7 +26,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', 'VERSION')) as \
     release_ = version_file.read().strip()
 
 project = 'FitPy'
-copyright = '2019-20, Till Biskup'
+copyright = '2019–21, Till Biskup'
 author = 'Till Biskup'
 
 # The short X.Y version
@@ -220,9 +220,10 @@ epub_exclude_files = ['search.html']
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
-    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-    'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
-    'matplotlib': ('https://matplotlib.org/', None),
+    'numpy': ('https://numpy.org/doc/stable/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
+    'matplotlib': ('https://matplotlib.org/stable/', None),
+    'aspecd': ('https://docs.aspecd.de/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------
