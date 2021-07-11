@@ -4,7 +4,7 @@ Concepts
 
 FitPy is built around a small set of general concepts, each aiming at complete reproducibility---and whereever possible replicability---of data acquisition, processing, and analysis. Despite its origin in spectroscopy, FitPy is generally agnostic with respect to the data processed.
 
-Due to being based on the `ASpecD framework for reproducible data analysis <https://www.aspecd.de/>`_, FitPy uses many of the underlying concepts, namely the dataset, model, and for the actual fitting the analysis step. Furthermore, recipe-driven data analysis is used as a user interface making it possible to reliably and reproducibly fit data with no programming skills needed.
+Due to being based on the `ASpecD framework for reproducible data analysis <https://www.aspecd.de/>`_, FitPy uses many of the underlying concepts, namely the dataset, model, and for the actual fitting the analysis step. Results can be presented in form of reports. Furthermore, recipe-driven data analysis is used as a user interface making it possible to reliably and reproducibly fit data with no programming skills needed.
 
 
 Dataset
@@ -33,6 +33,17 @@ Fitting
 *Fitting models to data by algorithmically adjusting the parameters of the former.*
 
 A fitting is actually an analysis step in terms of the ASpecD framework.
+
+
+
+Reports
+=======
+
+*Overview of the results of fits that can be created automatically.*
+
+To ensure reproducibility and good scientific practice, all information obtained during the fitting process is stored in a structured way, mostly within a dataset. However, a system designed for reproducible data analysis can only show its strengths if this information is easily accessible and can be presented in an appealing way.
+
+The idea behind reports is to create well formatted representations of the results of fitting a model to (experimental) data. This is based on templates provided or adjusted by the user.
 
 
 .. _tasks:

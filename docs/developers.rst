@@ -83,7 +83,7 @@ The documentation is built using `Sphinx <https://sphinx-doc.org/>`_, `Python <h
 To install the necessary Python dependencies, create a virtual environment, e.g., with ``virtualenv <environment>``, and activate it afterwards with ``<environment>/bin/activate``. Then install the dependencies using ``pip``::
 
     pip install sphinx
-    pip install sphinx-rtd-theme
+    pip install sphinx_rtd_theme
 
 
 To build the documentation:
