@@ -43,7 +43,7 @@ Making use of the concept of **recipe-driven data analysis**, actual fitting **n
 
     tasks:
       - kind: model
-        type: aspecd.Gaussian
+        type: Gaussian
         properties:
           parameters:
             position: 1.5
@@ -52,7 +52,7 @@ Making use of the concept of **recipe-driven data analysis**, actual fitting **n
         result: gaussian_model
 
       - kind: analysis
-        type: SimpleFit
+        type: fitpy.SimpleFit
         properties:
           model: gaussian_model
           parameters:
