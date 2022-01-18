@@ -30,13 +30,17 @@
 FitPy documentation
 ====================
 
-Welcome! This is the documentation for FitPy – a **framework** for the **advanced fitting of models to spectroscopic data** focussing on **reproducibility**. Supported are semi-stochastic sampling of starting conditions, global fitting of several datasets at once, and fitting several concurrent models to one dataset. FitPy builds upon and extends the `ASpecD framework <https://www.aspecd.de/>`_. At the same time, it relies on the `SciPy software stack <https://www.scipy.org/>`_ for its fitting capabilities.
+Welcome! This is the documentation for FitPy – a **framework** for the **advanced fitting of models to spectroscopic data** focussing on **reproducibility**. Supported are semi-stochastic sampling of starting conditions, global fitting of several datasets at once, and fitting several concurrent models to one dataset. FitPy builds upon and extends the `ASpecD framework <https://www.aspecd.de/>`_. At the same time, it relies on the `SciPy software stack <https://www.scipy.org/>`_ and on `Lmfit <https://lmfit.github.io/lmfit-py/>`_ for its fitting capabilities.
 
 Making use of the concept of **recipe-driven data analysis**, actual fitting **no longer requires programming skills**, but is as simple as writing a text file defining both, the model and the fitting parameters in an organised way. Curious? Have a look at the following example:
 
 
 .. code-block:: yaml
     :linenos:
+
+    format:
+      type: ASpecD recipe
+      version: '0.2'
 
     datasets:
       - /path/to/dataset
@@ -51,15 +55,16 @@ Making use of the concept of **recipe-driven data analysis**, actual fitting **n
         from_dataset: /path/to/dataset
         result: gaussian_model
 
-      - kind: analysis
-        type: fitpy.SimpleFit
+      - kind: fitpy.singleanalysis
+        type: SimpleFit
         properties:
           model: gaussian_model
           parameters:
-            - name: amplitude
-              start: 5
-              range: [3, 7]
-         result: fitted_gaussian
+            fit:
+              - name: amplitude
+                start: 5
+                range: [3, 7]
+        result: fitted_gaussian
 
 
 For more general information on the FitPy framework see its `Homepage <https://www.fitpy.de/>`_, and for how to use it, carry on reading. Interested in more real-live examples? Check out the :ref:`use cases section <use_cases>`.
@@ -134,7 +139,7 @@ There is a number of related packages that are based on the ASpecD framework and
 
 * `cwepr <https://docs.cwepr.de/>`_
 
-  Package for processing and analysing continuous-wave electron paramagnetic resonance (cw-EPR) data, originally developed by P. Kirchner, currently developed and maintained by M. Schröder and T. Biskup.
+  Package for processing and analysing continuous-wave electron paramagnetic resonance (cw-EPR) data, originally implemented by P. Kirchner, currently developed and maintained by M. Schröder and T. Biskup.
 
 You may as well be interested in the `LabInform project <https://www.labinform.de/>`_ focussing on the necessary more global infrastructure in a laboratory/scientific workgroup interested in more `reproducible research <https://www.reproducible-research.de/>`_. In short, LabInform is "The Open-Source Laboratory Information System".
 
