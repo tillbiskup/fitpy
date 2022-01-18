@@ -32,8 +32,19 @@ Fitting
 
 *Fitting models to data by algorithmically adjusting the parameters of the former.*
 
-A fitting is actually an analysis step in terms of the ASpecD framework.
+A fitting is actually an analysis step in terms of the ASpecD framework. On the other hand, fitting as such is a rather complex topic, and providing easy access to advanced fitting capabilities is at the core of the FitPy package, besides its focus on reproducibility.
 
+The core fitting capabilities come from some excellent libraries FitPy uses, namely the `SciPy software stack <https://www.scipy.org/>`_ and `Lmfit <https://lmfit.github.io/lmfit-py/>`_. It is truly once again "standing on the shoulders of giants", as Sir Isaac Newton phrased it in his now famous letter to Robert Hooke. Fitting includes different methods as well as strategies such as robust fitting via sampling of many different starting conditions, global fitting of a model to several datasets, and fitting several models at once to one dataset (*i.e.*, multiple spectral species).
+
+
+Plots
+=====
+
+*Graphical presentation of the results of fitting models to datasets.*
+
+An image is worth a thousand words. At least if the figure is designed and created sensibly, this is more than true for a graphical representation of scientific data. The simplest instance of a plot with respect to fitting is the combined graphical representation of data and fitted model. But the accuracy of the fit can be accessed and presented by different graphical representations as well.
+
+The plotting capabilities are based on the machinery provided by the ASpecD framework, and as such, the FitPy package extends these plotters with sensible specialised instances.
 
 
 Reports

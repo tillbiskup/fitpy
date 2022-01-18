@@ -4,10 +4,22 @@
 Use cases
 =========
 
-TBD
+
+.. sidebar:: Contents
+
+    .. contents::
+        :local:
+        :depth: 1
 
 
-Currently, this section is used by the developers to get an idea of how to design the interface of FitPy. Therefore, different, not yet implemented scenarios are listed as recipes. Assume the interface to change frequently for now, as it is still in the initial design phase.
+This section provides a few ideas of how basic operation of the FitPy package may look like. It focusses on **recipe-driven data analysis** as its user-friendly interface that does not require the spectroscopist to know anything about programming and allows to fully focus on the actual fitting.
+
+As a user, you write "recipes" in form of human-readable YAML files telling the application which tasks to perform on what datasets. This allows for fully unattended, automated and scheduled fitting. At the same time, it allows you to analyse the data without need for actual programming.
+
+
+.. important::
+
+    Currently, this section is used by the developers to get an idea of how to design the interface of FitPy. Therefore, different, not yet implemented scenarios are listed as recipes. Assume the interface to change frequently for now, as it is still in the initial design phase.
 
 
 Fitting of single datasets
