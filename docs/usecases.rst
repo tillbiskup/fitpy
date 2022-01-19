@@ -58,7 +58,7 @@ Generally, models are fitted to data of a dataset. While the datasets are loaded
           model: gaussian_model
           parameters:
             fit:
-              - name: amplitude
+              amplitude:
                 start: 5
                 range: [3, 7]
         result: fitted_gaussian
@@ -96,7 +96,7 @@ The algorithm used for fitting (the method) as well as other settings regarding 
           model: gaussian_model
           parameters:
             fit:
-              - name: amplitude
+              amplitude:
                 start: 5
                 range: [3, 7]
             algorithm:
@@ -136,7 +136,7 @@ Often, real data contain parts that cannot be described by a certain model, but 
           model: gaussian_model
           parameters:
             fit:
-              - name: amplitude
+              amplitude:
                 start: 5
                 range: [3, 7]
             algorithm:
@@ -181,7 +181,7 @@ One problem occurring with sampling algorithms is that the result is no longer a
           model: gaussian_model
           parameters:
             fit:
-              - name: amplitude
+              amplitude:
                 lhs_range: [1, 10]
             lhs:
               points: 5
@@ -227,14 +227,14 @@ Usually, as the number of parameters increases dramatically with more than one s
           model: multiple_gaussians
           parameters:
             fit:
-              - name: position
+              position:
                 start:
                   - 5
                   - 8
                 range:
                   - [3, 7]
                   - [6, 9]
-              - name: weights
+              weights:
                 start:
                   - 1
                 range:
@@ -288,7 +288,7 @@ As such, the fitting inherits from :class:`aspecd.analysis.MultiAnalysisStep`, a
             - gaussian_model_2
           parameters:
             fit:
-              - name: amplitude
+              amplitude:
                 start: 5
                 range: [3, 7]
         result: fitted_gaussian
