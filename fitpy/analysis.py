@@ -12,6 +12,31 @@ import aspecd.analysis
 
 
 class SimpleFit(aspecd.analysis.SingleAnalysisStep):
+    # noinspection PyUnresolvedReferences
+    """
+    Perform basic fit of a model to data of a dataset.
+
+    Attributes
+    ----------
+    model : :class:`aspecd.model.Model`
+        Model to fit to the data of a dataset
+
+    parameters : :class:`dict`
+        All parameters necessary to perform the fit.
+
+        fit : :class:`dict`
+            All model parameters that should be fitted.
+
+
+    Examples
+    --------
+    For convenience, a series of examples in recipe style (for details of
+    the recipe-driven data analysis, see :mod:`aspecd.tasks`) is given below
+    for how to make use of this class. The examples focus each on a single
+    aspect.
+
+
+    """
 
     def __init__(self):
         super().__init__()
