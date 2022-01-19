@@ -20,18 +20,16 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         self.parameters['fit'] = dict()
 
         self._fit_parameters = lmfit.Parameters()
+        self._fit_result = None
 
     def _perform_task(self):
         self.result = self.create_dataset()
         self.model.from_dataset(self.dataset)
 
         self._prepare_fit_parameters()
-
-        result = lmfit.minimize(self._calculate_residual,
-                                self._fit_parameters)
-        self.model.parameters = result.params.valuesdict()  # noqa
-        model_dataset = self.model.create()
-        self.result.data.data = model_dataset.data.data
+        self._fit_result = lmfit.minimize(self._calculate_residual,
+                                          self._fit_parameters)
+        self._assign_fitted_model_to_result()
 
     def _prepare_fit_parameters(self):
         for key, value in self.model.parameters.items():
@@ -49,3 +47,8 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         tmp_dataset = self.model.create()
         residuals = self.dataset.data.data - tmp_dataset.data.data
         return residuals
+
+    def _assign_fitted_model_to_result(self):
+        self.model.parameters = self._fit_result.params.valuesdict()  # noqa
+        model_dataset = self.model.create()
+        self.result.data.data = model_dataset.data.data

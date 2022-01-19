@@ -61,7 +61,7 @@ Making use of the concept of **recipe-driven data analysis**, actual fitting **n
           model: gaussian_model
           parameters:
             fit:
-              - name: amplitude
+              amplitude:
                 start: 5
                 range: [3, 7]
         result: fitted_gaussian
