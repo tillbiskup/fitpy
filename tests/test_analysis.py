@@ -21,9 +21,9 @@ class TestSimpleFit(unittest.TestCase):
         model.parameters['position'] = 2
         self.dataset = model.create()
 
-    def plot_dataset(self):
+    def plot_dataset(self, dataset):
         plotter = aspecd.plotting.SinglePlotter1D()
-        self.dataset.plot(plotter)
+        dataset.plot(plotter)
         plt.show()
 
     def test_instantiate_class(self):
@@ -53,3 +53,11 @@ class TestSimpleFit(unittest.TestCase):
         fit = self.dataset.analyse(self.fit)
         self.assertEqual(2., self.dataset.data.axes[0].values[
             np.argmax(fit.result.data.data)])
+
+    def test_returned_dataset_has_same_x_axis_as_model(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        fit = self.dataset.analyse(self.fit)
+        self.assertListEqual(list(self.dataset.data.axes[0].values),
+                             list(fit.result.data.axes[0].values))

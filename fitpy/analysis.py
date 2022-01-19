@@ -51,4 +51,4 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
     def _assign_fitted_model_to_result(self):
         self.model.parameters = self._fit_result.params.valuesdict()  # noqa
         model_dataset = self.model.create()
-        self.result.data.data = model_dataset.data.data
+        self.result.data = model_dataset.data
