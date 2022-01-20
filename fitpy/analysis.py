@@ -27,6 +27,13 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         fit : :class:`dict`
             All model parameters that should be fitted.
 
+            The keys of the dictionary need to correspond to the parameter
+            names of the model that should be fitted. The values are dicts
+            themselves, at least with the key ``start`` for the initial
+            parameter value. Additionally, you may supply a ``range`` with
+            a list as value defining the interval within the the parameter
+            is allowed to vary during fitting.
+
 
     Examples
     --------
@@ -34,6 +41,38 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
     the recipe-driven data analysis, see :mod:`aspecd.tasks`) is given below
     for how to make use of this class. The examples focus each on a single
     aspect.
+
+    Suppose you have a dataset and want to fit a Gaussian to its data.
+    Fitting is always a two-step process: (i) define the model, and (ii)
+    define the fitting task. Here and in the following examples we assume
+    a dataset to be imported as ``dataset``, and the model is
+    initially evaluated for this dataset (to get the same data dimensions
+    and alike, see :mod:`aspecd.model` for details).
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: SimpleFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  start: 5
+          result: fitted_gaussian
+
+    In this particular case, you define your model specifying position and
+    width, and fit this to the data allowing only the parameter amplitude
+    to vary, keeping position and width fixed at the given values.
 
 
     """
