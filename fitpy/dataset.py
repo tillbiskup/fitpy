@@ -69,3 +69,4 @@ class Data(aspecd.dataset.Data):
     def residual(self, residual):
         if residual.shape != self.data.shape:
             raise ValueError('Shapes of data and residual need to match.')
+        self._residual = residual

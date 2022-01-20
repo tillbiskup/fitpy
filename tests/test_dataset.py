@@ -31,6 +31,11 @@ class TestData(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, message):
             self.data.residual = np.zeros(5)
 
+    def test_set_residual(self):
+        self.data.data = np.zeros(5)
+        self.data.residual = np.zeros(5)
+        self.assertListEqual(list(np.zeros(5)), list(self.data.residual))
+
     def test_residual_in_dict(self):
         dict_ = self.data.to_dict()
         self.assertIn('residual', dict_)
