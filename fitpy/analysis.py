@@ -42,12 +42,15 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
     for how to make use of this class. The examples focus each on a single
     aspect.
 
-    Suppose you have a dataset and want to fit a Gaussian to its data.
     Fitting is always a two-step process: (i) define the model, and (ii)
     define the fitting task. Here and in the following examples we assume
     a dataset to be imported as ``dataset``, and the model is
     initially evaluated for this dataset (to get the same data dimensions
     and alike, see :mod:`aspecd.model` for details).
+
+    Suppose you have a dataset and want to fit a Gaussian to its data,
+    in this case only varying the amplitude, but keeping position and
+    width fixed to the values specified in the model:
 
     .. code-block:: yaml
 
@@ -73,7 +76,66 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
     In this particular case, you define your model specifying position and
     width, and fit this to the data allowing only the parameter amplitude
     to vary, keeping position and width fixed at the given values.
+    Furthermore, no range is provided for the values the amplitude can be
+    varied.
 
+    To provide a range (boundaries, interval) for the allowed values of a
+    fit parameter, simply add the key ``range``:
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: SimpleFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  start: 5
+                  range: [3, 7]
+          result: fitted_gaussian
+
+    Note that models usually will have standard values for all parameters.
+    Therefore, you only need to define those parameters in the model task
+    that shall *not* change during fitting and should have values
+    different from the standard.
+
+    If you were to fit multiple parameters of a model (as is usually the
+    case), provide all these parameters in the fit section of the
+    parameters of the fitting task:
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              width: 0.5
+          from_dataset: dataset
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: SimpleFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  start: 5
+                  range: [3, 7]
+                position:
+                  start: 2
+                  range: [0, 4]
+          result: fitted_gaussian
 
     """
 
@@ -101,6 +163,9 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
             if key in self.parameters['fit']:
                 parameter.set(value=self.parameters['fit'][key]['start'])
                 parameter.set(vary=True)
+                if 'range' in self.parameters['fit'][key]:
+                    parameter.set(min=self.parameters['fit'][key]['range'][0])
+                    parameter.set(max=self.parameters['fit'][key]['range'][1])
             else:
                 parameter.set(value=value)
                 parameter.set(vary=False)
@@ -116,3 +181,4 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         self.model.parameters = self._fit_result.params.valuesdict()  # noqa
         model_dataset = self.model.create()
         self.result.data = model_dataset.data
+        self.result.data.residual = self._fit_result.residual
