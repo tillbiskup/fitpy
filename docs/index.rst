@@ -53,6 +53,7 @@ Making use of the concept of **recipe-driven data analysis**, actual fitting **n
             position: 1.5
             width: 0.5
         from_dataset: /path/to/dataset
+        output: model
         result: gaussian_model
 
       - kind: fitpy.singleanalysis

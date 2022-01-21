@@ -61,6 +61,7 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
               position: 1.5
               width: 0.5
           from_dataset: dataset
+          output: model
           result: gaussian_model
 
         - kind: fitpy.singleanalysis
@@ -91,6 +92,7 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
               position: 1.5
               width: 0.5
           from_dataset: dataset
+          output: model
           result: gaussian_model
 
         - kind: fitpy.singleanalysis
@@ -121,6 +123,7 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
             parameters:
               width: 0.5
           from_dataset: dataset
+          output: model
           result: gaussian_model
 
         - kind: fitpy.singleanalysis

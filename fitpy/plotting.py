@@ -3,9 +3,47 @@ Graphical presentation of the results of fitting models to datasets.
 
 Fitting itself is a quite complicated process, and it is crucial for routine
 use to have graphical representations of the results, besides
-automatically generated reports that usually contain such
-graphical
-representations.
+automatically generated reports (see the :mod:`reports` module) that usually
+contain such graphical representations.
+
+Typically, graphical representations of fit results will contain both,
+the original data and the fitted model, at least as long as datasets with
+1D data are concerned. Additionally, one may be interested in plotting the
+residual as well.
+
+Technically, the plotters in the FitPy package rely on the additional
+properties of the :class:`fitpy.dataset.CalculatedDataset` class,
+particularly the property ``residual`` within the ``data`` property.
+Therein the residual of the fit is stored, and thus, the original data can
+simply be recovered by adding the residual to the fitted model contained
+in the data of the dataset.
+
+
+Types of plots
+==============
+
+Generally, at least two types of plotters can be distinguished with
+respect to the kind of information that should be represented graphically:
+
+* Graphical representation of both, data and fitted model
+
+  The simplest type of such a plotter displays both, data and fitted model
+  in one axis, perhaps with the residual in a second, smaller axes
+  underneath.
+
+  For 2D datasets, things become more complicated, but here, at least
+  fitted model and residual can be plotted in two axes.
+
+* Graphical representation of the reliability and quality of fits
+
+  Particularly for robust fits including LHS or similar sampling methods,
+  a graphical representation of the quality of the fit (*e.g.*,
+  the fitness value plotted as function of the index of the sample) is of
+  great value.
+
+
+Module documentation
+====================
 
 """
 
@@ -64,6 +102,10 @@ class SinglePlot1DProperties(aspecd.plotting.SinglePlot1DProperties):
 
     Additionally to the properties of the superclass, properties
     particularly for displaying both, data and fitted model exist.
+
+    Furthermore, some sensible settings for both, data and fitted model,
+    are provided, such as labels and line colours. Of course, you can
+    override these values manually.
 
     Attributes
     ----------

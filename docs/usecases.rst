@@ -50,6 +50,7 @@ Generally, models are fitted to data of a dataset. While the datasets are loaded
             position: 1.5
             width: 0.5
         from_dataset: /path/to/dataset
+        output: model
         result: gaussian_model
 
       - kind: fitpy.singleanalysis
@@ -88,6 +89,7 @@ The algorithm used for fitting (the method) as well as other settings regarding 
             position: 1.5
             width: 0.5
         from_dataset: /path/to/dataset
+        output: model
         result: gaussian_model
 
       - kind: fitpy.singleanalysis
@@ -128,6 +130,7 @@ Often, real data contain parts that cannot be described by a certain model, but 
             position: 1.5
             width: 0.5
         from_dataset: /path/to/dataset
+        output: model
         result: gaussian_model
 
       - kind: fitpy.singleanalysis
@@ -173,6 +176,7 @@ One problem occurring with sampling algorithms is that the result is no longer a
             position: 1.5
             width: 0.5
         from_dataset: /path/to/dataset
+        output: model
         result: gaussian_model
 
       - kind: fitpy.singleanalysis
@@ -219,6 +223,7 @@ Usually, as the number of parameters increases dramatically with more than one s
           parameters:
             - position: 5
             - position: 8
+        output: model
         result: multiple_gaussians
 
       - kind: fitpy.singleanalysis
@@ -269,6 +274,7 @@ As such, the fitting inherits from :class:`aspecd.analysis.MultiAnalysisStep`, a
             position: 1.5
             width: 0.5
         from_dataset: /path/to/first/dataset
+        output: model
         result: gaussian_model_1
 
       - kind: model
@@ -333,7 +339,7 @@ Thanks to the report generating capabilities of the ASpecD framework, generating
 
 As the results of a fit are not contained in the original experimental dataset, but rather in a calculated dataset that is returned by the fitting step, the reports need probably access to both, the original dataset and the fitted model residing in the calculated dataset. One could try to overcome this problem by providing the original data in some way in the calculated dataset that results from the fitting process.
 
-Shall reports automatically generate certain figures if these are not provided? May be sensible, but would include functionality from plotters in reports.
+Shall reports automatically generate certain figures if these are not provided? May be sensible, but would include functionality from plotters in reports. An alternative would be to provide recipe templates for specifying the plots that can be adapted by the user upon need.
 
 
 Pipelines
