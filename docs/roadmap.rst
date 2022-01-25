@@ -10,7 +10,7 @@ For version 0.1
 
 * General implementation of the interfaces
 
-* Dedicated plotters (?)
+* Dedicated plotters
 
   * Inspired by the plotting capabilities of lmfit
 

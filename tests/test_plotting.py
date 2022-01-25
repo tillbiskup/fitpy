@@ -76,7 +76,7 @@ class TestSinglePlotter1D(unittest.TestCase):
         plot = self.dataset.plot(self.plotter)
         self.assertEqual(plot.properties.data.color, plot.data.get_color())
 
-        plt.show()
+        # plt.show()
 
 
 class TestSinglePlot1DProperties(unittest.TestCase):
