@@ -13,4 +13,7 @@ import aspecd.report
 
 
 class LaTeXFitReporter(aspecd.report.LaTeXReporter):
-    pass
+
+    def __init__(self):
+        super().__init__()
+        self.package = 'fitpy'

@@ -1,0 +1,60 @@
+%{ extends templateDir + 'base.tex' }%
+
+%{ block title }%
+%{ endblock }%
+
+%{ block body }%
+\rule[1ex]{\textwidth}{1pt}
+\\[1em]
+\textbf{\LARGE Fit report}
+\\[1ex]
+\rule{\textwidth}{1pt}
+
+\hfill --- \textsl{{@ sysinfo.user.login }}, {@ timestamp }
+
+\section{Overview}
+
+\begin{tabbing}
+\hspace*{1.5cm}\=\kill
+Source:\>\texttt{{@ dataset.id | replace("_", "\\_") | replace("#", "\\#") }}
+\\
+Label:\>{@ dataset.label }
+\end{tabbing}
+
+A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset [add details here!]. For a first graphical overview, cf. Fig.~\ref{fig:overview}. Further details of the fitting process and the underlying model are given below. Information on how this report has been generated and how to cite the underlying software are given at the end.
+
+
+\begin{figure}[h!]
+\caption{\textbf{Overview of data and fitted simulation.} ...}
+\label{fig:overview}
+\end{figure}
+
+
+\section{Model}
+
+%{ if dataset.metadata.model.parameters }%
+Please note: Due to better compatibility with \LaTeX{}, the parameter names listed below have been changed from snake case (using the underscore \enquote{\_} as word separator) to camel case (medial capitals) with respect to their names in Python.
+
+\vspace*{1ex}
+\begin{tabular}{ll}
+\toprule
+\multicolumn{2}{c}{\textbf{Parameters}}
+\\
+\midrule
+%{ for key, value in dataset.metadata.model.parameters.items() }%
+{@ key | replace("_", "\\_") | replace("#", "\\#") } & {@ value | replace("_", "\\_") | replace("#", "\\#") }
+\\
+%{ endfor }%
+\bottomrule
+\end{tabular}
+\vspace*{1ex}
+%{ else }%
+For this model, no parameters were supplied nor necessary.
+%{ endif }%
+
+
+\section{Fitting}
+
+
+%{ include templateDir + "colophon.tex" }%
+%{ endblock }%
