@@ -84,6 +84,14 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
     for the superclasses can be set as well. The examples focus each on a
     single aspect.
 
+    .. note::
+
+        Usually, you will have set another ASpecD-derived package as
+        default package in your recipe for processing and analysing your data.
+        Hence, you need to provide the package name (fitpy) in the ``kind``
+        property, as shown in the examples.
+
+
     In the simplest case, just invoke the plotter with default values:
 
     .. code-block:: yaml
@@ -92,11 +100,6 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
          type: SinglePlotter1D
          properties:
            filename: output.pdf
-
-    Note that usually, you will have set another ASpecD-derived package as
-    default package for processing and analysing your data. Hence,
-    you need to provide the package name (fitpy) in the ``kind`` property,
-    as shown above.
 
     """
 

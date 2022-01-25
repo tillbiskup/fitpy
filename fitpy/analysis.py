@@ -48,6 +48,14 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
     initially evaluated for this dataset (to get the same data dimensions
     and alike, see :mod:`aspecd.model` for details).
 
+    .. note::
+
+        Usually, you will have set another ASpecD-derived package as
+        default package in your recipe for processing and analysing your data.
+        Hence, you need to provide the package name (fitpy) in the ``kind``
+        property, as shown in the examples.
+
+
     Suppose you have a dataset and want to fit a Gaussian to its data,
     in this case only varying the amplitude, but keeping position and
     width fixed to the values specified in the model:

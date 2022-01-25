@@ -26,6 +26,7 @@ class TestLaTeXFitReporter(unittest.TestCase):
         self.reporter.template = 'simplefit.tex'
         self.reporter.context['dataset'] = self.dataset.to_dict()
         self.reporter.render()
+        self.assertTrue(self.reporter.report)
 
     def test_create(self):
         self.reporter.template = 'simplefit.tex'
@@ -33,3 +34,4 @@ class TestLaTeXFitReporter(unittest.TestCase):
         self.reporter.filename = self.filename
         self.reporter.create()
         self.reporter.compile()
+        self.assertTrue(os.path.exists(self.result))
