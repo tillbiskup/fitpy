@@ -146,7 +146,7 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         super().__init__()
         self.description = 'Fit model to data of dataset'
         self.model = None
-        self.parameters['fit'] = dict()
+        self.parameters['fit'] = {}
         self.dataset_type = 'fitpy.dataset.CalculatedDataset'
 
         self._fit_parameters = lmfit.Parameters()

@@ -59,6 +59,9 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
     attribute. Allowed types are stored in the
     :attr:`aspecd.plotting.SinglePlotter1D.allowed_types` attribute.
 
+    Additionally to the functionality of the superclass, this plotter
+    displays the (experimental) data together with the fitted model.
+
 
     Attributes
     ----------
@@ -72,6 +75,28 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
     data : :class:`matplotlib.artist.Artist`
         Actual graphical representation of the data
 
+
+    Examples
+    --------
+    For convenience, a series of examples in recipe style (for details of
+    the recipe-driven data analysis, see :mod:`aspecd.tasks`) is given below
+    for how to make use of this class. Of course, all parameters settable
+    for the superclasses can be set as well. The examples focus each on a
+    single aspect.
+
+    In the simplest case, just invoke the plotter with default values:
+
+    .. code-block:: yaml
+
+       - kind: fitpy.singleplot
+         type: SinglePlotter1D
+         properties:
+           filename: output.pdf
+
+    Note that usually, you will have set another ASpecD-derived package as
+    default package for processing and analysing your data. Hence,
+    you need to provide the package name (fitpy) in the ``kind`` property,
+    as shown above.
 
     """
 

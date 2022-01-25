@@ -130,7 +130,7 @@ class Model(aspecd.metadata.Metadata):
     def __init__(self):
         super().__init__()
         self.type = ''
-        self.parameters = dict()
+        self.parameters = {}
 
     def from_model(self, model):
         """
