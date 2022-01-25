@@ -1,5 +1,6 @@
 import unittest
 
+import aspecd.model
 import lmfit
 import numpy as np
 
@@ -61,8 +62,35 @@ class TestCalculatedDatasetMetadata(unittest.TestCase):
     def test_instantiate_class(self):
         pass
 
+    def test_has_model_property(self):
+        self.assertTrue(hasattr(self.metadata, 'model'))
+
     def test_has_result_property(self):
         self.assertTrue(hasattr(self.metadata, 'result'))
+
+
+class TestModel(unittest.TestCase):
+    def setUp(self):
+        self.metadata = fitpy.dataset.Model()
+
+    def test_instantiate_class(self):
+        pass
+
+    def test_has_type_property(self):
+        self.assertTrue(hasattr(self.metadata, 'type'))
+
+    def test_has_parameters_property(self):
+        self.assertTrue(hasattr(self.metadata, 'parameters'))
+
+    def test_from_model_sets_type(self):
+        model = aspecd.model.Gaussian()
+        self.metadata.from_model(model)
+        self.assertEqual('aspecd.model.Gaussian', self.metadata.type)
+
+    def test_from_model_sets_parameters(self):
+        model = aspecd.model.Gaussian()
+        self.metadata.from_model(model)
+        self.assertDictEqual(model.parameters, self.metadata.parameters)
 
 
 class TestResult(unittest.TestCase):

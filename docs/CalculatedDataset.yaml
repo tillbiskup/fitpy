@@ -31,6 +31,9 @@ metadata:
   calculation:
     type: ''
     parameters: {}
+  model:
+    type: ''
+    parameters: {}
   result:
     parameters: null
     success: false

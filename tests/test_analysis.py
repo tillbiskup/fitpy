@@ -6,8 +6,10 @@ import numpy as np
 import aspecd.dataset
 import aspecd.model
 import aspecd.plotting
+import aspecd.utils
 
 import fitpy.analysis
+import fitpy.dataset
 
 
 class TestSimpleFit(unittest.TestCase):
@@ -39,12 +41,14 @@ class TestSimpleFit(unittest.TestCase):
     def test_has_fit_parameter(self):
         self.assertTrue('fit' in self.fit.parameters)
 
+    @unittest.skipIf(aspecd.utils.get_aspecd_version().startswith('0.6'),
+                     "Not supported with ASpecD < 0.7")
     def test_analysis_returns_calculated_dataset(self):
         self.create_dataset()
         self.fit.model = self.model
         fit = self.dataset.analyse(self.fit)
         self.assertIsInstance(fit.result,
-                              aspecd.dataset.CalculatedDataset)
+                              fitpy.dataset.CalculatedDataset)
 
     def test_analyse_returns_fitted_data(self):
         self.create_dataset()
@@ -90,3 +94,24 @@ class TestSimpleFit(unittest.TestCase):
         fit = self.dataset.analyse(self.fit)
         self.assertListEqual(list(np.zeros(len(self.dataset.data.data))),
                              list(fit.result.data.residual))
+
+    @unittest.skipIf(aspecd.utils.get_aspecd_version().startswith('0.6'),
+                     "Not supported with ASpecD < 0.7")
+    def test_returned_dataset_contains_model_metadata(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        fit = self.dataset.analyse(self.fit)
+        self.assertEqual(aspecd.utils.full_class_name(self.model),
+                         fit.result.metadata.model.type)
+        self.assertDictEqual(fit.model.parameters,
+                             fit.result.metadata.model.parameters)
+
+    @unittest.skipIf(aspecd.utils.get_aspecd_version().startswith('0.6'),
+                     "Not supported with ASpecD < 0.7")
+    def test_returned_dataset_contains_result_metadata(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        fit = self.dataset.analyse(self.fit)
+        self.assertTrue(fit.result.metadata.result.parameters)

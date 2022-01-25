@@ -147,6 +147,7 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         self.description = 'Fit model to data of dataset'
         self.model = None
         self.parameters['fit'] = dict()
+        self.dataset_type = 'fitpy.dataset.CalculatedDataset'
 
         self._fit_parameters = lmfit.Parameters()
         self._fit_result = None
@@ -185,3 +186,6 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         model_dataset = self.model.create()
         self.result.data = model_dataset.data
         self.result.data.residual = self._fit_result.residual
+        self.result.metadata.model.from_model(self.model)
+        self.result.metadata.result.from_lmfit_minimizer_result(
+            self._fit_result)

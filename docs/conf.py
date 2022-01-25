@@ -225,6 +225,7 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
     'matplotlib': ('https://matplotlib.org/stable/', None),
     'aspecd': ('https://docs.aspecd.de/', None),
+    'lmfit': ('https://lmfit.github.io/lmfit-py/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------

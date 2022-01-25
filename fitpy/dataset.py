@@ -18,9 +18,11 @@ plotters available in the :mod:`fitpy.plotting` module to check for their
 applicability.
 
 """
+import copy
 
 import aspecd.dataset
 import aspecd.metadata
+import aspecd.utils
 import numpy as np
 
 
@@ -94,6 +96,9 @@ class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
 
     Attributes
     ----------
+    model : :class:`Model`
+        Details of the model fitted to the data
+
     result : :class:`Result`
         Summary of results of fit
 
@@ -101,10 +106,113 @@ class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
 
     def __init__(self):
         super().__init__()
+        self.model = Model()
         self.result = Result()
 
 
+class Model(aspecd.metadata.Metadata):
+    """
+    Metadata of a model fitted to data of a dataset.
+
+    Part of the metadata of a :class:`CalculatedDataset` containing the
+    data of the model fitted to the data of another (experimental) dataset.
+
+    Attributes
+    ----------
+    type : :class:`str`
+        Full class name (including package) of the respective model class
+
+    parameters : :class:`dict`
+        All parameters of the model
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.type = ''
+        self.parameters = dict()
+
+    def from_model(self, model):
+        """
+        Set attributes from :class:`aspecd.model.Model`.
+
+        Parameters
+        ----------
+        model : :class:`aspecd.model.Model`
+            Model the attributes should be obtained from
+
+        """
+        self.type = aspecd.utils.full_class_name(model)
+        self.parameters = copy.deepcopy(model.parameters)
+
+
 class Result(aspecd.metadata.Metadata):
+    """
+    Metadata of results of fitting a model to data of a dataset.
+
+    Part of the metadata of a :class:`CalculatedDataset` containing the
+    data of the model fitted to the data of another (experimental) dataset.
+
+    While resembling the structure of the
+    :class:`lmfit.minimizer.MinimizerResult` class, this class tries to
+    abstract away from the attributes in terms of their names and
+    introduces more readable (and more lengthily) attribute names.
+
+    Attributes
+    ----------
+    parameters : :class:`lmfit.parameter.Parameters`
+        The best-fit parameters resulting from the fit.
+
+    success : :class:`bool`
+        True if the fit succeeded, otherwise False.
+
+    error_bars : :class:`bool`
+        True if uncertainties were estimated, otherwise False.
+
+    n_function_evaluations : :class:`int`
+        Number of function evaluations
+
+    n_variables : :class:`int`
+        Number of variables of the model
+
+    degrees_of_freedom : :class:`int`
+        Degrees of freedom
+
+    chi_square : :class:`float`
+        Chi-square value
+
+        For this value to be meaningful, the residual function needs to be
+        scaled properly to the uncertainties in the data.
+
+    reduced_chi_square : :class:`float`
+        Reduced chi-square value
+
+        For this value to be meaningful, the residual function needs to be
+        scaled properly to the uncertainties in the data.
+
+    akaike_information_criterion : :class:`float`
+        Akaike Information Criterion statistic
+
+    bayesian_information_criterion : :class:`float`
+        Bayesian Information Criterion statistic
+
+    variable_names : :class:`list`
+        Ordered list of variable parameter names used in the optimisation.
+
+    covariance_matrix : :class:`numpy.ndarray`
+        Covariance matrix from minimisation.
+
+        Rows and columns correspond to :attr:`variable_names`
+
+    initial_values : :class:`list`
+        List of initial values for variable parameters.
+
+        For the corresponding parameter names see :attr:`variable_names`.
+
+    message : :class:`str`
+        Message regarding the fit success.
+
+    """
 
     def __init__(self):
         super().__init__()
@@ -124,6 +232,15 @@ class Result(aspecd.metadata.Metadata):
         self.message = ''
 
     def from_lmfit_minimizer_result(self, result):
+        """
+        Set attributes from :class:`lmfit.minimizer.MinimizerResult`.
+
+        Parameters
+        ----------
+        result : :class:`lmfit.minimizer.MinimizerResult`
+            Result of a minimisation using lmfit
+
+        """
         mappings = {
             'params': 'parameters',
             'success': 'success',
