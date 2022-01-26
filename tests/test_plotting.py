@@ -95,4 +95,4 @@ class TestSinglePlot1DProperties(unittest.TestCase):
         self.assertEqual('data', self.plot_properties.data.label)
 
     def test_data_property_has_sensible_default_color(self):
-        self.assertEqual('#666', self.plot_properties.data.color)
+        self.assertEqual('#999', self.plot_properties.data.color)

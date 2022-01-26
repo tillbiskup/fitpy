@@ -100,7 +100,7 @@ How to cite
 
 FitPy is free software. However, if you use FitPy for your own research, please cite it appropriately:
 
-Till Biskup. FitPy (2021). `doi:10.5281/zenodo.####### <https://doi.org/10.5281/zenodo.#######>`_
+Till Biskup. FitPy (2022). `doi:10.5281/zenodo.####### <https://doi.org/10.5281/zenodo.#######>`_
 
 To make things easier, FitPy has a `DOI <https://doi.org/10.5281/zenodo.#######>`_ provided by `Zenodo <https://zenodo.org/>`_, and you may click on the badge below to directly access the record associated with it. Note that this DOI refers to the package as such and always forwards to the most current version.
 

@@ -151,7 +151,7 @@ class SinglePlot1DProperties(aspecd.plotting.SinglePlot1DProperties):
         super().__init__()
         self.data = aspecd.plotting.LineProperties()
         self.data.label = 'data'
-        self.data.color = '#666'
+        self.data.color = '#999'
 
     def apply(self, plotter=None):
         super().apply(plotter=plotter)

@@ -4,6 +4,7 @@
 %{ endblock }%
 
 %{ block body }%
+\thispagestyle{empty}
 \rule[1ex]{\textwidth}{1pt}
 \\[1em]
 \textbf{\LARGE Fit report}
@@ -16,19 +17,38 @@
 
 \begin{tabbing}
 \hspace*{1.5cm}\=\kill
+\textbf{Data}\\
 Source:\>\texttt{{@ dataset.id | replace("_", "\\_") | replace("#", "\\#") }}
 \\
 Label:\>{@ dataset.label }
+\\[1ex]
+\textbf{Model}\\
+Type:\>\texttt{{@ dataset.metadata.model.type }}
+\\[1ex]
+\textbf{Fit}\\
+Type:\>\texttt{{@ dataset.metadata.calculation.type }}
+\\
+Success:\>%{ if dataset.metadata.result.success }% yes %{ else }% no %{ endif }%
 \end{tabbing}
 
-A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset [add details here!]. For a first graphical overview, cf. Fig.~\ref{fig:overview}. Further details of the fitting process and the underlying model are given below. Information on how this report has been generated and how to cite the underlying software are given at the end.
+A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been
+%{ if dataset.metadata.result.success }% successfully %{ else }% \textbf{unsuccessfully} %{ endif }%
+fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset [add details here!]. For a first graphical overview, cf. Fig.~\ref{fig:overview}. Further details of the fitting process and the underlying model are given below. Information on how this report has been generated and how to cite the underlying software are given at the end.
 
 
 \begin{figure}[h!]
-\caption{\textbf{Overview of data and fitted simulation.} ...}
+%{ if figureFilename }%
+\begin{center}
+\includegraphics{{@ figureFilename }}
+\end{center}
+%{ endif }%
+\caption{\textbf{Overview of data and fitted simulation.} A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been
+%{ if dataset.metadata.result.success }% successfully %{ else }% \textbf{unsuccessfully} %{ endif }%
+fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset [add details here!]. Further details of the fitting process and the underlying model are given below.}
 \label{fig:overview}
 \end{figure}
 
+\clearpage
 
 \section{Model}
 

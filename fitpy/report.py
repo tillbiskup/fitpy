@@ -8,8 +8,13 @@ information always on the same place, allowing for easily comparing
 different fits.
 
 """
+import copy
+import os.path
 
+import aspecd.plotting
 import aspecd.report
+
+import fitpy.plotting
 
 
 class LaTeXFitReporter(aspecd.report.LaTeXReporter):
@@ -57,3 +62,25 @@ class LaTeXFitReporter(aspecd.report.LaTeXReporter):
     def __init__(self):
         super().__init__()
         self.package = 'fitpy'
+        self.dataset = None
+
+    def _render(self):
+        if self.dataset and self.filename:
+            self._create_figure()
+        super()._render()
+
+    def _create_figure(self):
+        dataset = copy.deepcopy(self.dataset)
+        plotter = fitpy.plotting.SinglePlotter1D()
+        plotter.parameters['tight_layout'] = True
+        plotter.parameters['tight'] = 'x'
+        plotter.parameters['show_legend'] = True
+        basename, _ = os.path.splitext(self.filename)
+        figure_filename = "".join([basename, '-fig', '.pdf'])
+        saver = aspecd.plotting.Saver()
+        saver.filename = figure_filename
+        plot = dataset.plot(plotter)
+        plot.save(saver)
+
+        self.context['figure_filename'] = figure_filename
+        self.includes.append(figure_filename)
