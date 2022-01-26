@@ -321,7 +321,48 @@ Comparing data and fitted model
 
 Basically, data, model, and perhaps the residual should be shown.
 
-As the results of a fit are not contained in the original experimental dataset, but rather in a calculated dataset that is returned by the fitting step, the plotters need probably access to both, the original dataset and the fitted model residing in the calculated dataset. One could try to overcome this problem by providing the original data in some way in the calculated dataset that results from the fitting process.
+As the results of a fit are not contained in the original experimental dataset, but rather in a calculated dataset that is returned by the fitting step, the plotters reconstruct the data of the original dataset by adding the residual to the fitted model.
+
+In the simplest way of a 1D dataset, the complete procedure, including model creation and fitting, may look as follows:
+
+
+.. code-block:: yaml
+    :linenos:
+
+    format:
+      type: ASpecD recipe
+      version: '0.2'
+
+    datasets:
+      - /path/to/dataset
+
+    tasks:
+      - kind: model
+        type: Gaussian
+        properties:
+          parameters:
+            position: 1.5
+            width: 0.5
+        from_dataset: /path/to/dataset
+        output: model
+        result: gaussian_model
+
+      - kind: fitpy.singleanalysis
+        type: SimpleFit
+        properties:
+          model: gaussian_model
+          parameters:
+            fit:
+              amplitude:
+                start: 5
+                range: [3, 7]
+        result: fitted_gaussian
+
+      - kind: fitpy.singleplot
+        type: SinglePlotter1D
+        properties:
+          filename: fit_result.pdf
+        apply_to: fitted_gaussian
 
 
 Robustness of sampling strategies
@@ -333,13 +374,57 @@ When sampling starting conditions, it is important to graphically display the re
 Fit reports
 ===========
 
-The importance of sensible reports cannot be overrated, and TSim is the key to the success of much of the own research, allowing a skilled student with few hours of introduction to perform fits to data without much need of further supervision besides discussing the results together.
+The importance of sensible reports cannot be overrated, and `TSim <https://www.till-biskup.de/en/software/matlab/tsim/>`_ is the key to the success of much of the own research, allowing a skilled student with few hours of introduction to perform fits to data without much need of further supervision besides discussing the results together.
 
 Thanks to the report generating capabilities of the ASpecD framework, generating reports should be straight-forward. Key here is not how to generate reports, but to provide sensible templates and, where necessary and sensible, generate the necessary information to be added to the reports.
 
-As the results of a fit are not contained in the original experimental dataset, but rather in a calculated dataset that is returned by the fitting step, the reports need probably access to both, the original dataset and the fitted model residing in the calculated dataset. One could try to overcome this problem by providing the original data in some way in the calculated dataset that results from the fitting process.
+Shall reports automatically generate certain figures if these are not provided? May be sensible, but would include functionality from plotters in reports. An alternative would be to provide recipe templates for specifying the plots that can be adapted by the user upon need. For the time being, the approach will be to automatically create a plot with standard appearance.
 
-Shall reports automatically generate certain figures if these are not provided? May be sensible, but would include functionality from plotters in reports. An alternative would be to provide recipe templates for specifying the plots that can be adapted by the user upon need.
+The full process, from loading data to reporting the final fit results, and including model definition and actual fitting, may look as follows:
+
+
+.. code-block:: yaml
+    :linenos:
+
+    format:
+      type: ASpecD recipe
+      version: '0.2'
+
+    datasets:
+      - /path/to/dataset
+
+    tasks:
+      - kind: model
+        type: Gaussian
+        properties:
+          parameters:
+            position: 1.5
+            width: 0.5
+        from_dataset: /path/to/dataset
+        output: model
+        result: gaussian_model
+
+      - kind: fitpy.singleanalysis
+        type: SimpleFit
+        properties:
+          model: gaussian_model
+          parameters:
+            fit:
+              amplitude:
+                start: 5
+                range: [3, 7]
+        result: fitted_gaussian
+
+      - kind: fitpy.report
+        type: LaTeXFitReporter
+        properties:
+          template: simplefit.tex
+          filename: fit_result.tex
+        compile: true
+        apply_to: fitted_gaussian
+
+
+In this particular case, the fit report will be saved to the file ``fit_result.tex`` and automatically compiled into a PDF file, as the ``compile`` flag is set to true.
 
 
 Pipelines

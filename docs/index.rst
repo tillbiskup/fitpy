@@ -31,7 +31,7 @@
 FitPy documentation
 ====================
 
-Welcome! This is the documentation for FitPy – a **framework** for the **advanced fitting of models to spectroscopic data** focussing on **reproducibility**. Supported are semi-stochastic sampling of starting conditions, global fitting of several datasets at once, and fitting several concurrent models to one dataset. FitPy builds upon and extends the `ASpecD framework <https://www.aspecd.de/>`_. At the same time, it relies on the `SciPy software stack <https://www.scipy.org/>`_ and on `Lmfit <https://lmfit.github.io/lmfit-py/>`_ for its fitting capabilities.
+Welcome! This is the documentation for FitPy – a **framework** for the **advanced fitting of models to spectroscopic data** focussing on **reproducibility**. Supported are semi-stochastic sampling of starting conditions, global fitting of several datasets at once, and fitting several concurrent models to one dataset. FitPy builds upon and extends the `ASpecD framework <https://www.aspecd.de/>`_. At the same time, it relies on the `SciPy software stack <https://www.scipy.org/>`_ and on `lmfit <https://lmfit.github.io/lmfit-py/>`_ for its fitting capabilities.
 
 Making use of the concept of **recipe-driven data analysis**, actual fitting **no longer requires programming skills**, but is as simple as writing a text file defining both, the model and the fitting parameters in an organised way. Curious? Have a look at the following example:
 
@@ -151,7 +151,7 @@ Finally, don't forget to check out the website on `reproducible research <https:
 License
 -------
 
-This program is free software: you can redistribute it and/or modify it under the terms of the **BSD License**. However, if you use ASpecD for your own research, please cite it appropriately. See :ref:`How to cite <sec-how_to_cite>` for details.
+This program is free software: you can redistribute it and/or modify it under the terms of the **BSD License**. However, if you use FitPy for your own research, please cite it appropriately. See :ref:`How to cite <sec-how_to_cite>` for details.
 
 
 A note on the logo

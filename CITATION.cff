@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using these metadata.
+title: FitPy
+abstract: >
+    FitPy is a framework for the advanced fitting of models to spectroscopic data focussing on reproducibility. Supported are semi-stochastic sampling of starting conditions, global fitting of several datasets at once, and fitting several concurrent models to one dataset. FitPy builds upon and extends the ASpecD framework. At the same time, it relies on the SciPy software stack and on lmfit for its fitting capabilities.
+
+    Making use of the concept of recipe-driven data analysis, actual fitting no longer requires programming skills, but is as simple as writing a text file defining both, the model and the fitting parameters in an organised way.
+authors:
+  - family-names: Biskup
+    given-names: Till
+    orcid: "https://orcid.org/0000-0003-2913-0004"
+type: software
+license: BSD-2-Clause
+repository-code: "https://github.com/tillbiskup/fitpy"
+keywords:
+  - "fitting",
+  - "spectroscopy",
+  - "data processing and analysis",
+  - "reproducible science",
+  - "reproducible research",
+  - "good scientific practice",
+  - "recipe-driven data analysis",
+identifiers:
+  - description: "The concept DOI of the work."
+    type: doi
+    value: 10.5281/zenodo.#######
+references:
+  - authors:
+    - family-names: Biskup
+      given-names: Till
+      orcid: "https://orcid.org/0000-0003-2913-0004"
+    doi: 10.5281/zenodo.4717937
+    repository-code: "https://github.com/tillbiskup/aspecd"
+    title: ASpecD
+    type: software
