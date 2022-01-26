@@ -194,3 +194,10 @@ class TestResult(unittest.TestCase):
             else:
                 self.assertEqual(getattr(self.result, key),
                                  getattr(self.metadata, value))
+
+    def test_to_dict_adds_value_to_parameters(self):
+        self.perform_fit()
+        self.metadata.from_lmfit_minimizer_result(self.result)
+        dict_ = self.metadata.to_dict()
+        for key in dict_['parameters'].keys():
+            self.assertIn('value', dict_['parameters'][key])

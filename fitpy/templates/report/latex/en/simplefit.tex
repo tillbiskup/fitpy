@@ -52,8 +52,13 @@ fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to th
 
 \section{Model}
 
+\begin{tabbing}
+\hspace*{1.5cm}\=\kill
+Type:\>\texttt{{@ dataset.metadata.model.type }}
+\end{tabbing}
+
 %{ if dataset.metadata.model.parameters }%
-Please note: Due to better compatibility with \LaTeX{}, the parameter names listed below have been changed from snake case (using the underscore \enquote{\_} as word separator) to camel case (medial capitals) with respect to their names in Python.
+The parameters of the model used for the final, fitted simulation as shown in Fig.~\ref{fig:overview}, are given in the table below.\footnote{Please note: Due to better compatibility with \LaTeX{}, the parameter names listed below have been changed from snake case (using the underscore \enquote{\_} as word separator) to camel case (medial capitals) with respect to their names in Python.} For further details regarding the fitting procedure, see the next section.
 
 \vspace*{1ex}
 \begin{tabular}{ll}
@@ -62,7 +67,7 @@ Please note: Due to better compatibility with \LaTeX{}, the parameter names list
 \\
 \midrule
 %{ for key, value in dataset.metadata.model.parameters.items() }%
-{@ key | replace("_", "\\_") | replace("#", "\\#") } & {@ value | replace("_", "\\_") | replace("#", "\\#") }
+{@ key | replace("_", "\\_") | replace("#", "\\#") } & {@ value | round(7) }
 \\
 %{ endfor }%
 \bottomrule
@@ -75,6 +80,52 @@ For this model, no parameters were supplied nor necessary.
 
 \section{Fitting}
 
+\begin{tabbing}
+\hspace*{1.5cm}\=\kill
+Type:\>\texttt{{@ dataset.metadata.calculation.type }}
+\\
+Success:\>%{ if dataset.metadata.result.success }% yes %{ else }% no %{ endif }%
+\\
+Errors:\>%{ if dataset.metadata.result.error_bars }% yes %{ else }% no %{ endif }%
+\end{tabbing}
+
+\subsection{Fit results}
+
+\begin{tabular}{lllllll}
+\toprule
+Parameter & start & min & max & end & stderr & varied
+\\
+\midrule
+%{ for key, value in dataset.metadata.result.parameters.items() }%
+{@ key } & {@ value.initValue } & {@ value.min } & {@ value.max } & {@ value.value | round(7) } & {@ value.stderr | round(7) } & %{ if value.vary }%yes%{else}%no%{ endif }%
+\\
+%{ endfor }%
+\bottomrule
+\end{tabular}
+
+
+\subsection{Fit statistics}
+
+\begin{tabbing}
+\hspace*{5.5cm}\=\kill
+Number of function evaluations:\> {@ dataset.metadata.result.nFunctionEvaluations }
+\\
+Degrees of freedom:\> {@ dataset.metadata.result.degreesOfFreedom }
+\\
+$\chi^2$\> {@ dataset.metadata.result.chiSquare | round(7) }
+\\
+reduced $\chi^2$\> {@ dataset.metadata.result.reducedChiSquare | round(7) }
+\\
+Akaike information criterion:\> {@ dataset.metadata.result.akaikeInformationCriterion | round(7) }
+\\
+Bayesian information criterion:\> {@ dataset.metadata.result.bayesianInformationCriterion | round(7) }
+\end{tabbing}
+
+Message of the solver:
+
+\begin{quote}
+{@ dataset.metadata.result.message }
+\end{quote}
 
 %{ include templateDir + "colophon.tex" }%
 %{ endblock }%

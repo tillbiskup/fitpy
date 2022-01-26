@@ -49,12 +49,14 @@ class TestLaTeXFitReporter(unittest.TestCase):
         pass
 
     def test_render(self):
+        self.create_dataset()
         self.reporter.template = 'simplefit.tex'
         self.reporter.context['dataset'] = self.dataset.to_dict()
         self.reporter.render()
         self.assertTrue(self.reporter.report)
 
     def test_create(self):
+        self.create_dataset()
         self.reporter.template = 'simplefit.tex'
         self.reporter.context['dataset'] = self.dataset.to_dict()
         self.reporter.filename = self.filename

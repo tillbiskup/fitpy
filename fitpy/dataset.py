@@ -265,6 +265,13 @@ class Result(aspecd.metadata.Metadata):
         self.initial_values = []
         self.message = ''
 
+    def to_dict(self, remove_empty=False):
+        dict_ = super().to_dict(remove_empty=remove_empty)
+        parameter_values = self.parameters.valuesdict()
+        for key in dict_['parameters'].keys():
+            dict_['parameters'][key]['value'] = parameter_values[key]
+        return dict_
+
     def from_lmfit_minimizer_result(self, result):
         """
         Set attributes from :class:`lmfit.minimizer.MinimizerResult`.
