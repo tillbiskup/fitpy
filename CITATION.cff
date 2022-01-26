@@ -13,13 +13,13 @@ type: software
 license: BSD-2-Clause
 repository-code: "https://github.com/tillbiskup/fitpy"
 keywords:
-  - "fitting",
-  - "spectroscopy",
-  - "data processing and analysis",
-  - "reproducible science",
-  - "reproducible research",
-  - "good scientific practice",
-  - "recipe-driven data analysis",
+  - "fitting"
+  - "spectroscopy"
+  - "data processing and analysis"
+  - "reproducible science"
+  - "reproducible research"
+  - "good scientific practice"
+  - "recipe-driven data analysis"
 identifiers:
   - description: "The concept DOI of the work."
     type: doi
