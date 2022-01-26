@@ -42,6 +42,7 @@ class CalculatedDataset(aspecd.dataset.CalculatedDataset):
         hierarchical key-value store of metadata
 
     """
+
     def __init__(self):
         super().__init__()
         self.data = Data()
@@ -166,16 +167,25 @@ class DataMetadata(aspecd.metadata.Metadata):
         Short description of the dataset
 
         Can be set by the user, defaults to the value set as
-        :attr:`aspecd.dataset.id` by the importer.
+        :attr:`aspecd.dataset.Dataset.id` by the importer.
 
     """
 
     def __init__(self):
         super().__init__()
-        self.id = ''
+        self.id = ''  # noqa
         self.label = ''
 
     def from_dataset(self, dataset):
+        """
+        Set attributes from :class:`aspecd.dataset.Dataset`.
+
+        Parameters
+        ----------
+        dataset : :class:`aspecd.dataset.Dataset`
+            Dataset the attributes should be obtained from
+
+        """
         self.id = dataset.id
         self.label = dataset.label
 
@@ -266,6 +276,24 @@ class Result(aspecd.metadata.Metadata):
         self.message = ''
 
     def to_dict(self, remove_empty=False):
+        """
+        Create dictionary containing public attributes of an object.
+
+        Parameters
+        ----------
+        remove_empty : :class:`bool`
+            Whether to remove keys with empty values
+
+            Default: False
+
+        Returns
+        -------
+        public_attributes : :class:`collections.OrderedDict`
+            Ordered dictionary containing the public attributes of the object
+
+            The order of attribute definition is preserved
+
+        """
         dict_ = super().to_dict(remove_empty=remove_empty)
         parameter_values = self.parameters.valuesdict()
         for key in dict_['parameters'].keys():

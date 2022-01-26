@@ -110,8 +110,15 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
 
     @staticmethod
     def applicable(dataset):
-        return hasattr(dataset.data, 'residual') \
-               and dataset.data.data.ndim == 1
+        """Check whether plot is applicable to the given dataset.
+
+        Returns
+        -------
+        applicable : :class:`bool`
+            `True` if successful, `False` otherwise.
+
+        """
+        return hasattr(dataset.data, 'residual') and dataset.data.data.ndim == 1
 
     def _create_plot(self):
         plot_function = getattr(self.axes, self.type)
@@ -154,6 +161,15 @@ class SinglePlot1DProperties(aspecd.plotting.SinglePlot1DProperties):
         self.data.color = '#999'
 
     def apply(self, plotter=None):
+        """
+        Apply properties to plot.
+
+        Parameters
+        ----------
+        plotter: :class:`SinglePlotter1D`
+            Plotter the properties should be applied to.
+
+        """
         super().apply(plotter=plotter)
         if plotter.data:
             self.data.apply(drawing=plotter.data)
