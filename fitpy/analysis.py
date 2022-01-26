@@ -197,3 +197,4 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         self.result.metadata.model.from_model(self.model)
         self.result.metadata.result.from_lmfit_minimizer_result(
             self._fit_result)
+        self.result.metadata.data.from_dataset(self.dataset)

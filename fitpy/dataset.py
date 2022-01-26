@@ -99,6 +99,9 @@ class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
     model : :class:`Model`
         Details of the model fitted to the data
 
+    data : class:`DataMetadata`
+        Details of the data the model has been fitted to
+
     result : :class:`Result`
         Summary of results of fit
 
@@ -107,6 +110,7 @@ class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
     def __init__(self):
         super().__init__()
         self.model = Model()
+        self.data = DataMetadata()
         self.result = Result()
 
 
@@ -144,6 +148,36 @@ class Model(aspecd.metadata.Metadata):
         """
         self.type = aspecd.utils.full_class_name(model)
         self.parameters = copy.deepcopy(model.parameters)
+
+
+class DataMetadata(aspecd.metadata.Metadata):
+    """
+    Metadata of the data(set) a model has been fitted to.
+
+    Part of the metadata of a :class:`CalculatedDataset` containing information
+    of the (experimental) dataset the model has been fitted to.
+
+    Attributes
+    ----------
+    id : :class:`str`
+        (unique) identifier of the dataset (i.e., path, LOI, or else)
+
+    label : :class:`str`
+        Short description of the dataset
+
+        Can be set by the user, defaults to the value set as
+        :attr:`aspecd.dataset.id` by the importer.
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.id = ''
+        self.label = ''
+
+    def from_dataset(self, dataset):
+        self.id = dataset.id
+        self.label = dataset.label
 
 
 class Result(aspecd.metadata.Metadata):

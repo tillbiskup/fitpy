@@ -34,6 +34,9 @@ metadata:
   model:
     type: ''
     parameters: {}
+  data:
+    id: ''
+    label: ''
   result:
     parameters: null
     success: false

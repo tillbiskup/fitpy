@@ -1,8 +1,11 @@
 import os
 import unittest
 
+import aspecd.model
+import aspecd.processing
 import numpy as np
 
+import fitpy.analysis
 import fitpy.dataset
 import fitpy.report
 
@@ -25,9 +28,22 @@ class TestLaTeXFitReporter(unittest.TestCase):
             os.remove(self.figure_filename)
 
     def create_dataset(self):
-        npoints = 100
-        self.dataset.data.data = np.linspace(0, 1, npoints)
-        self.dataset.data.residual = np.random.random(npoints) - 0.5
+        model = aspecd.model.Gaussian()
+        model.variables = [np.linspace(-10, 10, 1001)]
+        model.parameters['position'] = 2
+        data = model.create()
+        noise = aspecd.processing.Noise()
+        noise.parameters['amplitude'] = 0.2
+        data.process(noise)
+        data.id = 'foobar'
+        data.label = 'Some random spectral line'
+
+        fit = fitpy.analysis.SimpleFit()
+        fit.model = model
+        fit.parameters['fit'] = {'position': {'start': 0}}
+        fit = data.analyse(fit)
+
+        self.dataset = fit.result
 
     def test_instantiate_class(self):
         pass

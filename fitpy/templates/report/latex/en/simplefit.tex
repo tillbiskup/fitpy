@@ -18,9 +18,9 @@
 \begin{tabbing}
 \hspace*{1.5cm}\=\kill
 \textbf{Data}\\
-Source:\>\texttt{{@ dataset.id | replace("_", "\\_") | replace("#", "\\#") }}
+Source:\>\texttt{{@ dataset.metadata.data.id | replace("_", "\\_") | replace("#", "\\#") }}
 \\
-Label:\>{@ dataset.label }
+Label:\>{@ dataset.metadata.data.label }
 \\[1ex]
 \textbf{Model}\\
 Type:\>\texttt{{@ dataset.metadata.model.type }}
@@ -33,7 +33,7 @@ Success:\>%{ if dataset.metadata.result.success }% yes %{ else }% no %{ endif }%
 
 A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been
 %{ if dataset.metadata.result.success }% successfully %{ else }% \textbf{unsuccessfully} %{ endif }%
-fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset [add details here!]. For a first graphical overview, cf. Fig.~\ref{fig:overview}. Further details of the fitting process and the underlying model are given below. Information on how this report has been generated and how to cite the underlying software are given at the end.
+fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset \enquote{{@ dataset.metadata.data.label }} (source: \texttt{{@ dataset.metadata.data.id | replace("_", "\\_") | replace("#", "\\#") }}). For a first graphical overview, cf. Fig.~\ref{fig:overview}. Further details of the fitting process and the underlying model are given below. Information on how this report has been generated and how to cite the underlying software are given at the end.
 
 
 \begin{figure}[h!]
@@ -44,7 +44,7 @@ fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to th
 %{ endif }%
 \caption{\textbf{Overview of data and fitted simulation.} A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been
 %{ if dataset.metadata.result.success }% successfully %{ else }% \textbf{unsuccessfully} %{ endif }%
-fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset [add details here!]. Further details of the fitting process and the underlying model are given below.}
+fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset \enquote{{@ dataset.metadata.data.label }} (source: \texttt{{@ dataset.metadata.data.id | replace("_", "\\_") | replace("#", "\\#") }}). Further details of the fitting process and the underlying model are given below.}
 \label{fig:overview}
 \end{figure}
 

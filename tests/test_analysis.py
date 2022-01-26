@@ -115,3 +115,15 @@ class TestSimpleFit(unittest.TestCase):
         self.fit.parameters['fit'] = {'position': {'start': 0}}
         fit = self.dataset.analyse(self.fit)
         self.assertTrue(fit.result.metadata.result.parameters)
+
+    @unittest.skipIf(aspecd.utils.get_aspecd_version().startswith('0.6'),
+                     "Not supported with ASpecD < 0.7")
+    def test_returned_dataset_contains_data_metadata(self):
+        self.create_dataset()
+        self.dataset.id = 'foo'
+        self.dataset.label = 'random spectral line'
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        fit = self.dataset.analyse(self.fit)
+        self.assertEqual(self.dataset.id, fit.result.metadata.data.id)
+        self.assertEqual(self.dataset.label, fit.result.metadata.data.label)

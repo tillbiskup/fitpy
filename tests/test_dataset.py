@@ -65,6 +65,9 @@ class TestCalculatedDatasetMetadata(unittest.TestCase):
     def test_has_model_property(self):
         self.assertTrue(hasattr(self.metadata, 'model'))
 
+    def test_has_data_property(self):
+        self.assertTrue(hasattr(self.metadata, 'data'))
+
     def test_has_result_property(self):
         self.assertTrue(hasattr(self.metadata, 'result'))
 
@@ -91,6 +94,32 @@ class TestModel(unittest.TestCase):
         model = aspecd.model.Gaussian()
         self.metadata.from_model(model)
         self.assertDictEqual(model.parameters, self.metadata.parameters)
+
+
+class TestDataMetadata(unittest.TestCase):
+    def setUp(self):
+        self.metadata = fitpy.dataset.DataMetadata()
+
+    def test_instantiate_class(self):
+        pass
+
+    def test_has_id_property(self):
+        self.assertTrue(hasattr(self.metadata, 'id'))
+
+    def test_has_label_property(self):
+        self.assertTrue(hasattr(self.metadata, 'label'))
+
+    def test_from_dataset_sets_id(self):
+        dataset = fitpy.dataset.CalculatedDataset()
+        dataset.id = 'foo'
+        self.metadata.from_dataset(dataset)
+        self.assertEqual(dataset.id, self.metadata.id)
+
+    def test_from_dataset_sets_label(self):
+        dataset = fitpy.dataset.CalculatedDataset()
+        dataset.label = 'bar'
+        self.metadata.from_dataset(dataset)
+        self.assertEqual(dataset.label, self.metadata.label)
 
 
 class TestResult(unittest.TestCase):
