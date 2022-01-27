@@ -41,6 +41,9 @@ class TestSimpleFit(unittest.TestCase):
     def test_has_fit_parameter(self):
         self.assertTrue('fit' in self.fit.parameters)
 
+    def test_has_algorithm_parameter(self):
+        self.assertTrue('algorithm' in self.fit.parameters)
+
     @unittest.skipIf(aspecd.utils.get_aspecd_version().startswith('0.6'),
                      "Not supported with ASpecD < 0.7")
     def test_analysis_returns_calculated_dataset(self):
@@ -57,6 +60,13 @@ class TestSimpleFit(unittest.TestCase):
         fit = self.dataset.analyse(self.fit)
         self.assertEqual(2., self.dataset.data.axes[0].values[
             np.argmax(fit.result.data.data)])
+
+    def test_analyse_sets_algorithm_description(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        fit = self.dataset.analyse(self.fit)
+        self.assertTrue(fit.parameters['algorithm']['description'])
 
     def test_returned_dataset_has_same_x_axis_as_model(self):
         self.create_dataset()
@@ -127,3 +137,29 @@ class TestSimpleFit(unittest.TestCase):
         fit = self.dataset.analyse(self.fit)
         self.assertEqual(self.dataset.id, fit.result.metadata.data.id)
         self.assertEqual(self.dataset.label, fit.result.metadata.data.label)
+
+    def test_analyse_with_least_squares_algorithm(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        self.fit.parameters['algorithm']['method'] = 'least_squares'
+        fit = self.dataset.analyse(self.fit)
+        self.assertEqual(2., self.dataset.data.axes[0].values[
+            np.argmax(fit.result.data.data)])
+
+    def test_analyse_with_algorithm_parameters(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        self.fit.parameters['algorithm']['parameters'] = {'xtol': 1e-6}
+        fit = self.dataset.analyse(self.fit)
+        self.assertEqual(2., self.dataset.data.axes[0].values[
+            np.argmax(fit.result.data.data)])
+
+    def test_analyse_with_unknown_algorithm_raises(self):
+        self.create_dataset()
+        self.fit.model = self.model
+        self.fit.parameters['fit'] = {'position': {'start': 0}}
+        self.fit.parameters['algorithm']['method'] = 'foobar'
+        with self.assertRaisesRegex(ValueError, 'Unknown method'):
+            self.dataset.analyse(self.fit)

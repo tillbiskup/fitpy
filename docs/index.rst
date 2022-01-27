@@ -76,9 +76,9 @@ For more general information on the FitPy framework see its `Homepage <https://w
 Features
 --------
 
-A list of features, planned for the first public release:
+A list of features, not all implemented yet, but planned for the next releases:
 
-* Framework for the advanced fitting of models to spectroscopic data focussing on reproducibility.
+* Advanced fitting of models to spectroscopic data focussing on reproducibility.
 
 * Simple user interface requiring no programming skills.
 
@@ -87,6 +87,15 @@ A list of features, planned for the first public release:
 * Global fitting of several datasets at once
 
 * Fitting of several concurrent models (*i.e.*, "species") to one dataset
+
+
+And to make it even more convenient for users and future-proof:
+
+* Open source project written in Python (>= 3.7)
+
+* Developed fully test-driven
+
+* Extensive user and API documentation
 
 
 .. warning::
@@ -133,11 +142,11 @@ There is a number of related packages that are based on the ASpecD framework and
 
 * `ASpecD <https://docs.aspecd.de/>`_
 
-  A Python framework for the analysis of spectroscopic data focussing on reproducibility and good scientific practice. The framework the cwepr package is based on, developed by T. Biskup.
+  A Python framework for the analysis of spectroscopic data focussing on reproducibility and good scientific practice. The framework the FitPy package is based on, developed by T. Biskup.
 
 * `trepr <https://docs.trepr.de/>`_
 
-  Package for processing and analysing time-resolved electron paramagnetic resonance (TREPR) data, developed by J. Popp and maintained by T. Biskup.
+  Package for processing and analysing time-resolved electron paramagnetic resonance (TREPR) data, developed by J. Popp, currently developed and maintained by M. Schröder and T. Biskup.
 
 * `cwepr <https://docs.cwepr.de/>`_
 

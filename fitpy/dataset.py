@@ -85,6 +85,7 @@ class Data(aspecd.dataset.Data):
 
 
 class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
+    # noinspection PyUnresolvedReferences
     """
     Metadata for a dataset with calculated data.
 
@@ -97,6 +98,11 @@ class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
 
     Attributes
     ----------
+    calculation : :class:`aspecd.metadata.Calculation`
+        Information on the calculation.
+
+        Contain, *inter alia*, the parameters of the calculation.
+
     model : :class:`Model`
         Details of the model fitted to the data
 

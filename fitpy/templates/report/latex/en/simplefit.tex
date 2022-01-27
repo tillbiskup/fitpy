@@ -91,13 +91,20 @@ Errors:\>%{ if dataset.metadata.result.error_bars }% yes %{ else }% no %{ endif 
 
 \subsection{Fit results}
 
+All parameters of the model are listed in the table below. Which parameter has been varied during fitting is given in the last column, \emph{Varied}. A summary of all parameters of the model and their respective values is given above in the \emph{Model} section of the report.
+
+\vspace*{1ex}
+
 \begin{tabular}{lllllll}
 \toprule
-Parameter & start & min & max & end & stderr & varied
+\textbf{Parameter} & Initial & Lower bound & Upper bound & Final & Error & Varied
 \\
 \midrule
 %{ for key, value in dataset.metadata.result.parameters.items() }%
-{@ key } & {@ value.initValue } & {@ value.min } & {@ value.max } & {@ value.value | round(7) } & {@ value.stderr | round(7) } & %{ if value.vary }%yes%{else}%no%{ endif }%
+{@ key } & {@ value.initValue }
+& %{if value.min | string == "-inf"}%$-\infty$%{else}%{@ value.min }%{endif}%
+& %{if value.max | string == "inf"}%$\infty$%{else}%{@ value.max }%{endif}%
+& {@ value.value | round(7) } & {@ value.stderr | round(7) } & %{ if value.vary }%yes%{else}%no%{ endif }%
 \\
 %{ endfor }%
 \bottomrule
@@ -105,6 +112,8 @@ Parameter & start & min & max & end & stderr & varied
 
 
 \subsection{Fit statistics}
+
+To evaluate the quality of the obtained fit, besides its overall success (for the latter, see the \emph{Success} flag given above), a number of statistical measures can be used. Those returned by the \texttt{lmfit} package are summarised below. For their detailed meaning see the literature and the \texttt{lmfit} documentation.
 
 \begin{tabbing}
 \hspace*{5.5cm}\=\kill
@@ -124,8 +133,40 @@ Bayesian information criterion:\> {@ dataset.metadata.result.bayesianInformation
 Message of the solver:
 
 \begin{quote}
-{@ dataset.metadata.result.message }
+{@ dataset.metadata.result.message | replace("_", "\\_") | replace("#", "\\#") }
 \end{quote}
+
+\subsection{Fit algorithm}
+
+\begin{tabbing}
+\hspace*{2.5cm}\=\kill
+Method:\>\texttt{{@ dataset.metadata.calculation.parameters.algorithm.method  | replace("_", "\\_")}}
+\\
+Description:\>\parbox[t]{13.5cm}{\raggedright {@ dataset.metadata.calculation.parameters.algorithm.description }}
+\\
+\end{tabbing}
+
+Here, \emph{Method} refers to the method name used internally in the \texttt{lmfit} package (and in most cases reflecting the respective method from the underlying \texttt{scipy.optimize}), and \emph{Description} provides a bit more details.
+
+%{ if dataset.metadata.calculation.parameters.algorithm.parameters }%
+The parameters of the algorithm used are given in the table below.\footnote{Please note: Due to better compatibility with \LaTeX{}, the parameter names listed below have been changed from snake case (using the underscore \enquote{\_} as word separator) to camel case (medial capitals) with respect to their names in Python.}
+
+\vspace*{1ex}
+\begin{tabular}{ll}
+\toprule
+\multicolumn{2}{c}{\textbf{Parameters}}
+\\
+\midrule
+%{ for key, value in dataset.metadata.calculation.parameters.algorithm.parameters.items() }%
+{@ key | replace("_", "\\_") | replace("#", "\\#") } & {@ value | replace("_", "\\_") | replace("#", "\\#") }
+\\
+%{ endfor }%
+\bottomrule
+\end{tabular}
+\vspace*{1ex}
+%{ else }%
+For this algorithm, no further parameters were explicitly supplied. Check the \texttt{lmfit} and \texttt{scipy.optimize} documentation for further details, as there may well be relevant implicit parameters.
+%{ endif }%
 
 %{ include templateDir + "colophon.tex" }%
 %{ endblock }%

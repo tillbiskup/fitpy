@@ -42,7 +42,7 @@ setuptools.setup(
         "Topic :: Scientific/Engineering",
     ],
     install_requires=[
-        'aspecd',
+        'aspecd>0.6.4',
         'scipy',
         'lmfit',
     ],
@@ -50,5 +50,5 @@ setuptools.setup(
         'dev': ['prospector'],
         'docs': ['sphinx', 'sphinx_rtd_theme'],
     },
-    python_requires='>=3.5',
+    python_requires='>=3.7',
 )

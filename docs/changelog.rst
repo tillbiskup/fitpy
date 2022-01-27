@@ -12,6 +12,14 @@ Not yet released
 
 * First public release
 
+* General implementation of the interfaces
+
+* Dedicated plotters plotting of both, data and fitted model
+
+* Reporting capabilities
+
+* Settings for the fit algorithm
+
 * ...
 
 
