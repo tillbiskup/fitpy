@@ -1,6 +1,12 @@
 """
 Actual fitting in form of analysis steps derived from the ASpecD framework.
 
+.. sidebar:: Contents
+
+    .. contents::
+        :local:
+        :depth: 1
+:
 Fitting of a model to (experimental) data can always be seen as an analysis
 step in context of the ASpecD framework, resulting in a calculated dataset.
 
@@ -140,11 +146,55 @@ operate on single datasets.
 
 * :class:`SimpleFit`
 
-    Perform basic fit of a model to data of a dataset.
+  Perform basic fit of a model to data of a dataset.
+
+  The result is stored as calculated dataset and can be investigated
+  graphically using dedicated plotters from the :mod:`fitpy.plotting`
+  module as well as reporters from the :mod:`fitpy.report` module.
+
+  With default settings, a least-Squares minimization using the
+  Levenberg-Marquardt method is carried out. Initial values and ranges for
+  each variable parameter of the model can be specified, as well as
+  details for the algorithm.
 
 * :class:`LHSFit`
 
-    Fit of a model to data of a dataset using LHS of starting conditions.
+  Fit of a model to data of a dataset using LHS of starting conditions.
+
+  In case of more complicated fits, *e.g.* many variable parameters or a
+  rough fitness landscape of the optimisation including several local
+  minima, obtaining a robust fit and finding the global minimum requires
+  to sample initial conditions and to perform fits for all these conditions.
+
+  Here, a Latin Hypercube gets used to sample the initial conditions. For
+  each of these, a fit is performed in the same way as in
+  :class:`SimpleFit`. The best fit is stored in the result as usual,
+  and additionally, the sample grid, the discrepancy as measure for the
+  quality of the grid, as well as all results from the individual fits are
+  stored in the ``lhs`` property of the metadata of the resulting dataset.
+  This allows for both, handling this resulting dataset as usual and
+  evaluating the robustness of the fit.
+
+
+Helper classes
+==============
+
+Additionally to the fitting tasks described above, helper classes exist for
+specific tasks.
+
+* :class:`ExtractLHSStatistics`
+
+  Extract statistical criterion from LHS results for evaluating robustness.
+
+  When performing a robust fitting, *e.g.* by employing :class:`LHSFit`,
+  evaluating the robustness of the obtained results is a crucial step.
+  Therefore, the results from each individual fit starting with a grid
+  point of the Latin Hypercube are contained in the resulting dataset.
+  This analysis step extracts the given criterion from the calculated
+  dataset and returns itself a calculated dataset with the values of the
+  criterion sorted in ascending order as its data. The result can be
+  graphically represented using a :class:`aspecd.plotting.SinglePlotter1D`.
+
 
 
 Module documentation
@@ -162,6 +212,15 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
     # noinspection PyUnresolvedReferences
     """
     Perform basic fit of a model to data of a dataset.
+
+    The result is stored as calculated dataset and can be investigated
+    graphically using dedicated plotters from the :mod:`fitpy.plotting`
+    module as well as reporters from the :mod:`fitpy.report` module.
+
+    With default settings, a least-Squares minimization using the
+    Levenberg-Marquardt method is carried out. Initial values and ranges for
+    each variable parameter of the model can be specified, as well as
+    details for the algorithm.
 
     Attributes
     ----------

@@ -101,7 +101,7 @@ All parameters of the model are listed in the table below. Which parameter has b
 \\
 \midrule
 %{ for key, value in dataset.metadata.result.parameters.items() }%
-{@ key } & {@ value.initValue }
+{@ key } & {@ value.initValue | round(7) }
 & %{if value.min | string == "-inf"}%$-\infty$%{else}%{@ value.min }%{endif}%
 & %{if value.max | string == "inf"}%$\infty$%{else}%{@ value.max }%{endif}%
 & {@ value.value | round(7) } & {@ value.stderr | round(7) } & %{ if value.vary }%yes%{else}%no%{ endif }%

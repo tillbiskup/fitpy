@@ -26,5 +26,8 @@ docs/_build
 docs/_static
 docs/_templates
 
-# For now: examples
-/examples/
+# Examples section
+/examples/**/*-[0-9]*T[0-9]*.yaml
+/examples/**/*tex
+/examples/**/*pdf
+/examples/**/*png
