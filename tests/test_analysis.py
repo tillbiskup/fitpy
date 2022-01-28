@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import aspecd.dataset
+from aspecd.exceptions import NotApplicableToDatasetError
 import aspecd.model
 import aspecd.plotting
+import aspecd.processing
 import aspecd.utils
 
 import fitpy.analysis
@@ -315,3 +317,64 @@ class TestLHSFit(unittest.TestCase):
             list(fit1.result.metadata.lhs.samples.flatten()),
             list(fit2.result.metadata.lhs.samples.flatten())
         )
+
+
+class TestExtractLHSStatistics(unittest.TestCase):
+    def setUp(self):
+        self.analysis = fitpy.analysis.ExtractLHSStatistics()
+
+    def create_dataset(self):
+        model = aspecd.model.Gaussian()
+        model.variables = [np.linspace(-10, 10, 1001)]
+        model.parameters['position'] = 2
+        data = model.create()
+        noise = aspecd.processing.Noise()
+        noise.parameters['amplitude'] = 0.2
+        data.process(noise)
+        data.id = 'foobar'
+        data.label = 'Some random spectral line'
+
+        fit = fitpy.analysis.LHSFit()
+        fit.model = model
+        fit.parameters['fit'] = {'position': {'lhs_range': [-8, 8]}}
+        fit.parameters['lhs'] = {'points': 5}
+        fit = data.analyse(fit)
+
+        self.dataset = fit.result
+
+    def test_instantiate_class(self):
+        pass
+
+    def test_apply_to_dataset_without_lhs_raises(self):
+        with self.assertRaises(NotApplicableToDatasetError):
+            dataset = fitpy.dataset.CalculatedDataset()
+            dataset.analyse(self.analysis)
+
+    def test_has_sensible_description(self):
+        self.assertIn('Extract LHS statistics from calculated dataset',
+                      self.analysis.description)
+
+    def test_has_criterion_parameter(self):
+        self.assertTrue('criterion' in self.analysis.parameters)
+
+    def test_analysis_returns_calculated_dataset(self):
+        self.create_dataset()
+        analysis = self.dataset.analyse(self.analysis)
+        self.assertIsInstance(analysis.result,
+                              aspecd.dataset.CalculatedDataset)
+
+    def test_returned_dataset_contains_sorted_criterion_as_data(self):
+        self.create_dataset()
+        criterion = [result.chi_square
+                     for result in self.dataset.metadata.lhs.results]
+        criterion.sort()
+        analysis = self.dataset.analyse(self.analysis)
+        self.assertListEqual(criterion, list(analysis.result.data.data))
+
+    def test_returned_dataset_contains_correct_axes_labels(self):
+        self.create_dataset()
+        analysis = self.dataset.analyse(self.analysis)
+        self.assertEqual('index of samples',
+                         analysis.result.data.axes[0].quantity)
+        self.assertEqual('chi square',
+                         analysis.result.data.axes[1].quantity)

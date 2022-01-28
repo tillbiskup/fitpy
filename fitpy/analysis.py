@@ -165,6 +165,9 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
 
     Attributes
     ----------
+    result : :class:`fitpy.dataset.CalculatedDataset`
+        Calculated dataset containing the result of the fit.
+
     model : :class:`aspecd.model.Model`
         Model to fit to the data of a dataset
 
@@ -454,6 +457,9 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
 
     Attributes
     ----------
+    result : :class:`fitpy.dataset.CalculatedDatasetLHS`
+        Calculated dataset containing the result of the fit.
+
     model : :class:`aspecd.model.Model`
         Model to fit to the data of a dataset
 
@@ -832,3 +838,126 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
             self._fit_results)
         self.result.metadata.lhs.samples = self._lhs_samples
         self.result.metadata.lhs.discrepancy = self._lhs_discrepancy
+
+
+class ExtractLHSStatistics(aspecd.analysis.SingleAnalysisStep):
+    # noinspection PyUnresolvedReferences
+    """
+    Extract statistical criterion from LHS results for evaluating robustness.
+
+    When performing a robust fitting, *e.g.* by employing :class:`LHSFit`,
+    evaluating the robustness of the obtained results is a crucial step.
+    Therefore, the results from each individual fit starting with a grid
+    point of the Latin Hypercube are contained in the resulting dataset.
+    This analysis step extracts the given criterion from the calculated
+    dataset and returns itself a calculated dataset with the values of the
+    criterion sorted in ascending order as its data. The result can be
+    graphically represented using a :class:`aspecd.plotting.SinglePlotter1D`.
+
+    Attributes
+    ----------
+    result : :class:`aspecd.dataset.CalculatedDataset`
+        Calculated dataset containing the extracted statistical criterion.
+
+    parameters : :class:`dict`
+        All parameters necessary to perform the fit.
+
+        These parameters will be available from the calculation metadata of
+        the resulting :class:`fitpy.dataset.CalculatedDatasetLHS`.
+
+        criterion : :class:`str`
+            Statistical criterion extracted from the LHS results
+
+
+    Examples
+    --------
+    For convenience, a series of examples in recipe style (for details of
+    the recipe-driven data analysis, see :mod:`aspecd.tasks`) is given below
+    for how to make use of this class. The examples focus each on a single
+    aspect.
+
+    Suppose you have fitted a Gaussian to the data of a dataset, as shown in
+    the example section of the :class:`LHSFit` class. If you now want to
+    extract the reduced chi square value and plot it, the whole procedure
+    could look like this:
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          output: model
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: LHSFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  lhs_range: [2, 8]
+              lhs:
+                points: 7
+          result: fitted_gaussian
+
+        - kind: fitpy.singleanalysis
+          type: ExtractLHSStatistics
+          properties:
+            parameters:
+              criterion: reduced_chi_square
+          result: reduced_chi_squares
+          apply_to: fitted_gaussian
+
+        - kind: singleplot
+          type: SinglePlotter1D
+          properties:
+            properties:
+              drawing:
+                marker: 'o'
+                linestyle: 'none'
+            filename: 'reduced_chi_squares.pdf'
+          apply_to: reduced_chi_squares
+
+    This would plot the reduced chi square values in ascending order,
+    showing the individual values as not connected dots.
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.description = 'Extract LHS statistics from calculated dataset'
+        self.parameters['criterion'] = 'chi_square'
+
+        self._criterion_names = {
+            'chi_square': 'chi square',
+            'reduced_chi_square': 'reduced chi square',
+            'akaike_information_criterion': 'Akaike information criterion',
+            'bayesian_information_criterion': 'Bayesian information criterion',
+        }
+
+    @staticmethod
+    def applicable(dataset):
+        """Check whether analysis step is applicable to the given dataset.
+
+        Returns
+        -------
+        applicable : :class:`bool`
+            `True` if successful, `False` otherwise.
+
+        """
+        return hasattr(dataset.metadata, 'lhs')
+
+    def _perform_task(self):
+        self.result = self.create_dataset()
+        criterion = [getattr(result, self.parameters['criterion'])
+                     for result in self.dataset.metadata.lhs.results]
+        criterion.sort()
+        self.result.data.data = np.asarray(criterion)
+        self.result.data.axes[0].quantity = 'index of samples'
+        self.result.data.axes[1].quantity = \
+            self._criterion_names[self.parameters['criterion']]

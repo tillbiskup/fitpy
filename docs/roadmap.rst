@@ -8,7 +8,7 @@ A few ideas how to develop the project further, currently a list as a reminder f
 For version 0.1
 ===============
 
-* Plotters for evaluating the results of semi-stochastic sampling of starting conditions (Latin hypercube sampling, LHS)
+* Reporter for LHSFit
 
 * Scaling of model and data: How?
 
