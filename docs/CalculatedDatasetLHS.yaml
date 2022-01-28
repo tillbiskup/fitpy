@@ -1,0 +1,100 @@
+data:
+  calculated: true
+  data:
+    type: numpy.ndarray
+    dtype: float64
+    array: []
+  axes:
+  - quantity: ''
+    symbol: ''
+    unit: ''
+    label: ''
+    values:
+      type: numpy.ndarray
+      dtype: float64
+      array: []
+    index: []
+  - quantity: ''
+    symbol: ''
+    unit: ''
+    label: ''
+    values:
+      type: numpy.ndarray
+      dtype: float64
+      array: []
+    index: []
+  residual:
+    type: numpy.ndarray
+    dtype: float64
+    array: []
+metadata:
+  calculation:
+    type: ''
+    parameters: {}
+  model:
+    type: ''
+    parameters: {}
+  data:
+    id: ''
+    label: ''
+  result:
+    parameters: null
+    success: false
+    error_bars: false
+    n_function_evaluations: 0
+    n_variables: 0
+    degrees_of_freedom: 0
+    chi_square: 0.0
+    reduced_chi_square: 0.0
+    akaike_information_criterion: 0.0
+    bayesian_information_criterion: 0.0
+    variable_names: []
+    covariance_matrix:
+      type: numpy.ndarray
+      dtype: float64
+      array: []
+    initial_values: []
+    message: ''
+  lhs:
+    samples: null
+    discrepancy: null
+    results: []
+history: []
+analyses: []
+annotations: []
+representations: []
+id: ''
+label: ''
+references: []
+tasks: []
+_origdata:
+  calculated: true
+  data:
+    type: numpy.ndarray
+    dtype: float64
+    array: []
+  axes:
+  - quantity: ''
+    symbol: ''
+    unit: ''
+    label: ''
+    values:
+      type: numpy.ndarray
+      dtype: float64
+      array: []
+    index: []
+  - quantity: ''
+    symbol: ''
+    unit: ''
+    label: ''
+    values:
+      type: numpy.ndarray
+      dtype: float64
+      array: []
+    index: []
+  residual:
+    type: numpy.ndarray
+    dtype: float64
+    array: []
+_package_name: fitpy
+_history_pointer: -1
