@@ -107,7 +107,7 @@ And to make it even more convenient for users and future-proof:
 
 
 .. warning::
-  FitPy is currently under active development and still considered in Alpha development state. Therefore, expect frequent changes in features and public APIs that may break your own code. Nevertheless, feedback as well as feature requests are highly welcome.
+  FitPy is currently under active development and still considered in Beta development state. Therefore, expect frequent changes in features and public APIs that may break your own code. Nevertheless, feedback as well as feature requests are highly welcome.
 
 
 .. _sec-how_to_cite:
@@ -118,6 +118,8 @@ How to cite
 FitPy is free software. However, if you use FitPy for your own research, please cite it appropriately:
 
 Till Biskup. FitPy (2022). `doi:10.5281/zenodo.####### <https://doi.org/10.5281/zenodo.#######>`_
+
+As FitPy is based on the SciPy and lmfit packages, you are highly encouraged to cite these two packages as well: SciPy: `doi:10.1038/s41592-019-0686-2 <https://doi.org/10.1038/s41592-019-0686-2>`_, lmfit: `doi:10.5281/zenodo.598352 <https://doi.org/10.5281/zenodo.598352>`_.
 
 To make things easier, FitPy has a `DOI <https://doi.org/10.5281/zenodo.#######>`_ provided by `Zenodo <https://zenodo.org/>`_, and you may click on the badge below to directly access the record associated with it. Note that this DOI refers to the package as such and always forwards to the most current version.
 

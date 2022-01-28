@@ -370,6 +370,61 @@ Robustness of sampling strategies
 
 When sampling starting conditions, it is important to graphically display the results for the different samples, to evaluate the robustness of the fit and the applicability of the grid used.
 
+Key here is to extract the statistical criterion from the result of a LHSFit. As the result is a calculated dataset, a standard plotter from the ASpecD framework can be used to diplay the results:
+
+
+.. code-block:: yaml
+    :linenos:
+
+    format:
+      type: ASpecD recipe
+      version: '0.2'
+
+    datasets:
+      - /path/to/dataset
+
+    tasks:
+      - kind: model
+        type: Gaussian
+        properties:
+          parameters:
+            position: 1.5
+            width: 0.5
+        from_dataset: /path/to/dataset
+        output: model
+        result: gaussian_model
+
+      - kind: fitpy.singleanalysis
+        type: LHSFit
+        properties:
+          model: gaussian_model
+          parameters:
+            fit:
+              amplitude:
+                lhs_range: [1, 10]
+            lhs:
+              points: 5
+        result: fitted_gaussian
+
+      - kind: fitpy.singleanalysis
+        type: ExtractLHSStatistics
+        properties:
+          parameters:
+            criterion: reduced_chi_square
+        result: reduced_chi_squares
+        apply_to: fitted_gaussian
+
+      - kind: singleplot
+        type: SinglePlotter1D
+        properties:
+          properties:
+            drawing:
+              marker: 'o'
+              linestyle: 'none'
+          filename: 'reduced_chi_squares.pdf'
+        apply_to: reduced_chi_squares
+
+
 
 Fit reports
 ===========

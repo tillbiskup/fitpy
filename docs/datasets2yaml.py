@@ -1,7 +1,7 @@
 import aspecd.utils
 
 
-class_names = ['CalculatedDataset']
+class_names = ['CalculatedDataset', 'CalculatedDatasetLHS']
 
 for class_name in class_names:
     yaml = aspecd.utils.Yaml()

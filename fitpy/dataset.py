@@ -362,9 +362,10 @@ class Result(aspecd.metadata.Metadata):
 
         """
         dict_ = super().to_dict(remove_empty=remove_empty)
-        parameter_values = self.parameters.valuesdict()
-        for key in dict_['parameters'].keys():
-            dict_['parameters'][key]['value'] = parameter_values[key]
+        if self.parameters:
+            parameter_values = self.parameters.valuesdict()
+            for key in dict_['parameters'].keys():
+                dict_['parameters'][key]['value'] = parameter_values[key]
         return dict_
 
     def from_lmfit_minimizer_result(self, result):
