@@ -1,0 +1,190 @@
+%{ extends templateDir + 'base.tex' }%
+
+%{ block title }%
+%{ endblock }%
+
+%{ block body }%
+\thispagestyle{empty}
+\rule[1ex]{\textwidth}{1pt}
+\\[1em]
+\textbf{\LARGE Fit report}
+\\[1ex]
+\rule{\textwidth}{1pt}
+
+\hfill --- \textsl{{@ sysinfo.user.login }}, {@ timestamp }
+
+\section{Overview}
+
+\begin{tabbing}
+\hspace*{1.5cm}\=\kill
+\textbf{Data}\\
+Source:\>\texttt{{@ dataset.metadata.data.id | replace("_", "\\_") | replace("#", "\\#") }}
+\\
+Label:\>{@ dataset.metadata.data.label }
+\\[1ex]
+\textbf{Model}\\
+Type:\>\texttt{{@ dataset.metadata.model.type }}
+\\[1ex]
+\textbf{Fit}\\
+Type:\>\texttt{{@ dataset.metadata.calculation.type }}
+\\
+Success:\>%{ if dataset.metadata.result.success }% yes %{ else }% no %{ endif }%
+\end{tabbing}
+
+A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been
+%{ if dataset.metadata.result.success }% successfully %{ else }% \textbf{unsuccessfully} %{ endif }%
+fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset \enquote{{@ dataset.metadata.data.label }} (source: \texttt{{@ dataset.metadata.data.id | replace("_", "\\_") | replace("#", "\\#") }}). For a first graphical overview, cf. Fig.~\ref{fig:overview}. Further details of the fitting process and the underlying model are given below. Information on how this report has been generated and how to cite the underlying software are given at the end.
+
+
+\begin{figure}[h!]
+%{ if figureFilename }%
+\begin{center}
+\includegraphics{{@ figureFilename }}
+\end{center}
+%{ endif }%
+\caption{\textbf{Overview of data and fitted simulation.} A simulation based on the model \texttt{{@ dataset.metadata.model.type }} has been
+%{ if dataset.metadata.result.success }% successfully %{ else }% \textbf{unsuccessfully} %{ endif }%
+fitted using FitPy's \texttt{{@ dataset.metadata.calculation.type }} class to the data of the dataset \enquote{{@ dataset.metadata.data.label }} (source: \texttt{{@ dataset.metadata.data.id | replace("_", "\\_") | replace("#", "\\#") }}). Further details of the fitting process and the underlying model are given below.}
+\label{fig:overview}
+\end{figure}
+
+\clearpage
+
+\section{Model}
+
+\begin{tabbing}
+\hspace*{1.5cm}\=\kill
+Type:\>\texttt{{@ dataset.metadata.model.type }}
+\end{tabbing}
+
+%{ if dataset.metadata.model.parameters }%
+The parameters of the model used for the final, fitted simulation as shown in Fig.~\ref{fig:overview}, are given in the table below.\footnote{Please note: Due to better compatibility with \LaTeX{}, the parameter names listed below have been changed from snake case (using the underscore \enquote{\_} as word separator) to camel case (medial capitals) with respect to their names in Python.} For further details regarding the fitting procedure, see the next section.
+
+\vspace*{1ex}
+\begin{tabular}{ll}
+\toprule
+\multicolumn{2}{c}{\textbf{Parameters}}
+\\
+\midrule
+%{ for key, value in dataset.metadata.model.parameters.items() }%
+{@ key | replace("_", "\\_") | replace("#", "\\#") } & {@ value | round(7) }
+\\
+%{ endfor }%
+\bottomrule
+\end{tabular}
+\vspace*{1ex}
+%{ else }%
+For this model, no parameters were supplied nor necessary.
+%{ endif }%
+
+
+\section{Fitting}
+
+\begin{tabbing}
+\hspace*{1.5cm}\=\kill
+Type:\>\texttt{{@ dataset.metadata.calculation.type }}
+\\
+Success:\>%{ if dataset.metadata.result.success }% yes %{ else }% no %{ endif }%
+\\
+Errors:\>%{ if dataset.metadata.result.error_bars }% yes %{ else }% no %{ endif }%
+\end{tabbing}
+
+\subsection{Fit results}
+
+All parameters of the model are listed in the table below. Which parameter has been varied during fitting is given in the last column, \emph{Varied}. A summary of all parameters of the model and their respective values is given above in the \emph{Model} section of the report.
+
+\vspace*{1ex}
+
+\begin{tabular}{lllllll}
+\toprule
+\textbf{Parameter} & Initial & Lower bound & Upper bound & Final & Error & Varied
+\\
+\midrule
+%{ for key, value in dataset.metadata.result.parameters.items() }%
+{@ key } & {@ value.initValue }
+& %{if value.min | string == "-inf"}%$-\infty$%{else}%{@ value.min }%{endif}%
+& %{if value.max | string == "inf"}%$\infty$%{else}%{@ value.max }%{endif}%
+& {@ value.value | round(7) } & {@ value.stderr | round(7) } & %{ if value.vary }%yes%{else}%no%{ endif }%
+\\
+%{ endfor }%
+\bottomrule
+\end{tabular}
+
+
+\subsection{Fit statistics}
+
+To evaluate the quality of the obtained fit, besides its overall success (for the latter, see the \emph{Success} flag given above), a number of statistical measures can be used. Those returned by the \texttt{lmfit} package are summarised below. For their detailed meaning see the literature and the \texttt{lmfit} documentation.
+
+\begin{tabbing}
+\hspace*{5.5cm}\=\kill
+Number of function evaluations:\> {@ dataset.metadata.result.nFunctionEvaluations }
+\\
+Degrees of freedom:\> {@ dataset.metadata.result.degreesOfFreedom }
+\\
+$\chi^2$\> {@ dataset.metadata.result.chiSquare | round(7) }
+\\
+reduced $\chi^2$\> {@ dataset.metadata.result.reducedChiSquare | round(7) }
+\\
+Akaike information criterion:\> {@ dataset.metadata.result.akaikeInformationCriterion | round(7) }
+\\
+Bayesian information criterion:\> {@ dataset.metadata.result.bayesianInformationCriterion | round(7) }
+\end{tabbing}
+
+Message of the solver:
+
+\begin{quote}
+{@ dataset.metadata.result.message | replace("_", "\\_") | replace("#", "\\#") }
+\end{quote}
+
+\subsection{Fit algorithm}
+
+\begin{tabbing}
+\hspace*{2.5cm}\=\kill
+Method:\>\texttt{{@ dataset.metadata.calculation.parameters.algorithm.method  | replace("_", "\\_")}}
+\\
+Description:\>\parbox[t]{13.5cm}{\raggedright {@ dataset.metadata.calculation.parameters.algorithm.description }}
+\\
+\end{tabbing}
+
+Here, \emph{Method} refers to the method name used internally in the \texttt{lmfit} package (and in most cases reflecting the respective method from the underlying \texttt{scipy.optimize}), and \emph{Description} provides a bit more details.
+
+%{ if dataset.metadata.calculation.parameters.algorithm.parameters }%
+The parameters of the algorithm used are given in the table below.\footnote{Please note: Due to better compatibility with \LaTeX{}, the parameter names listed below have been changed from snake case (using the underscore \enquote{\_} as word separator) to camel case (medial capitals) with respect to their names in Python.}
+
+\vspace*{1ex}
+\begin{tabular}{ll}
+\toprule
+\multicolumn{2}{c}{\textbf{Parameters}}
+\\
+\midrule
+%{ for key, value in dataset.metadata.calculation.parameters.algorithm.parameters.items() }%
+{@ key | replace("_", "\\_") | replace("#", "\\#") } & {@ value | replace("_", "\\_") | replace("#", "\\#") }
+\\
+%{ endfor }%
+\bottomrule
+\end{tabular}
+\vspace*{1ex}
+%{ else }%
+For this algorithm, no further parameters were explicitly supplied. Check the \texttt{lmfit} and \texttt{scipy.optimize} documentation for further details, as there may well be relevant implicit parameters.
+%{ endif }%
+
+
+\subsection{Robustness of the fit}
+
+To evaluate the robustness of the fit using the LHS approach, the results from each individual grid point have been plotted sorted in ascending order, cf. Fig.~\ref{fig:lhs_robustness}.
+
+
+\begin{figure}[h!]
+%{ if lhsFigureFilename }%
+\begin{center}
+\includegraphics{{@ lhsFigureFilename }}
+\end{center}
+%{ endif }%
+\caption{\textbf{Robustness of the fit.} As generally fitting is a minimisation problem, the lower the value of the respective criterion, the better the fit. For a rough fitness landscape, you will likely observe several \emph{plateaus}, and ideally a visible plateau at the very left, representing the lowest (hopefully global) minimum.}
+\label{fig:lhs_robustness}
+\end{figure}
+
+
+
+%{ include templateDir + "colophon.tex" }%
+%{ endblock }%
