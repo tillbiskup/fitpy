@@ -28,7 +28,7 @@ import numpy as np
 
 class CalculatedDataset(aspecd.dataset.CalculatedDataset):
     """
-    Datasets containing results of fitting a model to data.
+    Dataset containing results of fitting a model to data.
 
     Attributes
     ----------
@@ -50,6 +50,29 @@ class CalculatedDataset(aspecd.dataset.CalculatedDataset):
         self._origdata = Data()
         self._origdata.calculated = True
         self.metadata = CalculatedDatasetMetadata()
+
+
+class CalculatedDatasetLHS(CalculatedDataset):
+    # noinspection PyUnresolvedReferences
+    """
+    Dataset containing results of fitting a model to data.
+
+    Attributes
+    ----------
+    data : :class:`Data`
+        numeric data, residual, and axes
+
+        In contrast to other datasets, it contains the residual
+        (difference between fitted model and original data) as well.
+
+    metadata : :obj:`CalculatedDatasetLHSMetadata`
+        hierarchical key-value store of metadata
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.metadata = CalculatedDatasetLHSMetadata()
 
 
 class Data(aspecd.dataset.Data):
@@ -119,6 +142,44 @@ class CalculatedDatasetMetadata(aspecd.metadata.CalculatedDatasetMetadata):
         self.model = Model()
         self.data = DataMetadata()
         self.result = Result()
+
+
+class CalculatedDatasetLHSMetadata(CalculatedDatasetMetadata):
+    # noinspection PyUnresolvedReferences
+    """
+    Metadata for a dataset with calculated data.
+
+    This class contains the metadata for a dataset consisting of
+    calculated data, i.e., :class:`CalculatedDataset`.
+
+    Metadata can be converted to dict via
+    :meth:`aspecd.utils.ToDictMixin.to_dict()`, e.g., for generating
+    reports using templates and template engines.
+
+    Attributes
+    ----------
+    calculation : :class:`aspecd.metadata.Calculation`
+        Information on the calculation.
+
+        Contain, *inter alia*, the parameters of the calculation.
+
+    model : :class:`Model`
+        Details of the model fitted to the data
+
+    data : class:`DataMetadata`
+        Details of the data the model has been fitted to
+
+    result : :class:`Result`
+        Summary of results of fit
+
+    lhs : :class:`LHS`
+        Details of the LHS and its full results for each sampling
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.lhs = LHS()
 
 
 class Model(aspecd.metadata.Metadata):
@@ -335,3 +396,57 @@ class Result(aspecd.metadata.Metadata):
         for key, value in mappings.items():
             if hasattr(result, key):
                 setattr(self, value, getattr(result, key))
+
+
+class LHS(aspecd.metadata.Metadata):
+    """
+    Metadata of the LHS and its full results for each sampling.
+
+    Part of the metadata of a :class:`CalculatedDatasetLHS` containing the
+    data of the model fitted to the data of another (experimental) dataset.
+
+    Attributes
+    ----------
+    samples : :class:`numpy.array`
+        Grid of the Latin Hypercube
+
+    discrepancy : :class:`float`
+        Discrepancy of the sample.
+
+        The discrepancy is a uniformity criterion used to assess the space
+        filling of a number of samples in a hypercube. A discrepancy
+        quantifies the distance between the continuous uniform distribution
+        on a hypercube and the discrete uniform distribution on distinct
+        sample points. (from :func:`scipy.stats.qmc.discrepancy`)
+
+    results : :class:`list`
+        Results for each sample of the Latin Hypercube.
+
+        Each result is an instance of :class:`Result`.
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.samples = None
+        self.discrepancy = None
+        self.results = []
+
+    def from_lmfit_minimizer_results(self, results):
+        """
+        Set attributes from :class:`lmfit.minimizer.MinimizerResult`.
+
+        Parameters
+        ----------
+        results : :class:`list`
+            List of results of a minimisation using lmfit
+
+            Each result is an instance of
+            :class:`lmfit.minimizer.MinimizerResult` and gets transferred to
+            an instance of :class:`Result`.
+
+        """
+        for result in results:
+            metadata = Result()
+            metadata.from_lmfit_minimizer_result(result)
+            self.results.append(metadata)

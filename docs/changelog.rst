@@ -20,7 +20,7 @@ Not yet released
 
 * Settings for the fit algorithm
 
-* ...
+* Semi-stochastic sampling of starting conditions (Latin hypercube sampling, LHS)
 
 
 Version 0.1.0.dev1

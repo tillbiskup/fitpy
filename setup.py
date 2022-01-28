@@ -43,7 +43,8 @@ setuptools.setup(
     ],
     install_requires=[
         'aspecd>0.6.4',
-        'scipy',
+        'numpy',
+        'scipy>=1.7.0',
         'lmfit',
     ],
     extras_require={
