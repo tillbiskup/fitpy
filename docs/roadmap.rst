@@ -8,12 +8,18 @@ A few ideas how to develop the project further, currently a list as a reminder f
 For version 0.1
 ===============
 
-* Semi-stochastic sampling of starting conditions (Latin hypercube sampling, LHS)
+* Plotters for evaluating the results of semi-stochastic sampling of starting conditions (Latin hypercube sampling, LHS)
+
+* Scaling of model and data: How?
 
 
 
 For later versions
 ==================
+
+* Fitting of several concurrent models (*i.e.*, "species") to one dataset
+
+* Omitting regions of data from fitting
 
 * Global fitting of several datasets at once
 
@@ -21,9 +27,7 @@ For later versions
 
   * Defining offsets for a parameter for the different datasets
 
-* Fitting of several concurrent models (*i.e.*, "species") to one dataset
-
-* Omitting regions of data from fitting
+* Parallelise LHS
 
 
 Todos

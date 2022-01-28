@@ -4,6 +4,152 @@ Actual fitting in form of analysis steps derived from the ASpecD framework.
 Fitting of a model to (experimental) data can always be seen as an analysis
 step in context of the ASpecD framework, resulting in a calculated dataset.
 
+
+Introduction
+============
+
+Fitting in context of the FitPy framework is always a two-step process:
+
+#. define the model, and
+
+#. define the fitting task.
+
+The model is an instance of :class:`aspecd.model.Model`, and the fitting
+task one of the analysis steps contained in this module. They are, in turn,
+instances of :class:`aspecd.analysis.AnalysisStep`.
+
+A first, simple but complete example of a recipe performing a fit on
+experimental data, is given below.
+
+.. code-block:: yaml
+    :linenos:
+
+    format:
+      type: ASpecD recipe
+      version: '0.2'
+
+    datasets:
+      - /path/to/dataset
+
+    tasks:
+      - kind: model
+        type: Gaussian
+        properties:
+          parameters:
+            position: 1.5
+            width: 0.5
+        from_dataset: /path/to/dataset
+        output: model
+        result: gaussian_model
+
+      - kind: fitpy.singleanalysis
+        type: SimpleFit
+        properties:
+          model: gaussian_model
+          parameters:
+            fit:
+              amplitude:
+                start: 5
+                range: [3, 7]
+        result: fitted_gaussian
+
+
+In this case, a Gaussian model is created, with values for two parameters
+set explicitly and not varied during the fit. The third parameter is varied
+during the fit, within a given range. Furthermore, using
+:class:`SimpleFit` here without further parameters, a least-squares fit
+using the Levenberg-Marquardt method is carried out.
+
+
+.. note::
+
+    Usually, you will have set another ASpecD-derived package as
+    default package in your recipe for processing and analysing your data.
+    Hence, you need to provide the package name (fitpy) in the ``kind``
+    property, as shown in the examples.
+
+
+This seamless integration of FitPy into all packages derived from the ASpecD
+framework ensures full reproducibility and allows to easily pre- and
+postprocess the data accordingly. Particularly for analysing the results of
+fits, have a look at the dedicated plotters in the :mod:`fitpy.plotting`
+module and the reporters in the :mod:`fitpy.report` module.
+
+
+Fitting strategies
+==================
+
+Fitting models to data is generally a complex endeavour, and FitPy will
+*not* take any decisions for you. However, it provides powerful abstractions
+and a simple user interface, letting you automate as much as possible,
+while retaining full reproducibility. Thus, it is possible to create entire
+pipelines spanning a series of different fitting strategies, analyse the
+results, and making an informed decision for each individual question.
+
+The following list provides an overview of the different fitting strategies
+supported by FitPy (currently, as of January 2022, only a subset of these
+strategies is implemented).
+
+* Simple fitting of single datasets
+
+  Make informed guesses for the initial values of the variable parameters of
+  a model and fit the model to the data. The most straight-forward strategy.
+  Still, different optimisation algorithms can be chosen.
+
+  If the fitness landscape is rough and contains local minima, the fit may
+  not converge or get stuck in local minima.
+
+* Robust fitting via sampling of initial conditions (LHS)
+
+  Instead of informed guesses for the initial values of the variable
+  parameters of a model, these initial values are randomly chosen using a
+  Latin Hypercube. For each of the resulting grid points, an optimisation is
+  performed, analogous to what has been described above.
+
+  Generally, this approach will take much longer, with the computing time
+  scaling with the number of grid points, but it is much more robust,
+  particularly with complicated fitness landscapes containing many local
+  minima.
+
+* Fitting multiple species to one dataset
+
+  Basically the same as fitting a simple model to the data of a dataset,
+  but this time providing a :class:`aspecd.model.CompositeModel`.
+
+  Given the usually larger number of variable parameters, robust
+  fitting strategies (LHS) should be used.
+
+* Global fitting of several datasets at once
+
+  Fit models with a joint set of parameters to a series of independent
+  datasets. Can become arbitrarily complex given that some parameters may be
+  allowed to independently vary for each dataset, while others are
+  constrained, while still others (typically the majority) will be identical
+  for each dataset.
+
+
+Common to all these different fitting strategies is the need to sometimes omit
+parts of a dataset from fitting.
+
+
+Concrete fitting tasks implemented
+==================================
+
+Currently (as of January 2022), only fitting tasks are implemented that
+operate on single datasets.
+
+* :class:`SimpleFit`
+
+    Perform basic fit of a model to data of a dataset.
+
+* :class:`LHSFit`
+
+    Fit of a model to data of a dataset using LHS of starting conditions.
+
+
+Module documentation
+====================
+
 """
 
 import aspecd.analysis
@@ -347,6 +493,19 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
         lhs : :class:`dict`
             Settings for the Latin Hypercube used to sample initial conditions.
 
+            The most important parameter is ``points``, defining the
+            points in each direction of the Latin Hypercube.
+
+            Additionally, all attributes of
+            :class:`scipy.stats.qmc.LatinHypercube` can be set. Currently,
+            the relevant parameters are ``centered`` (to center the point
+            within the multi-dimensional grid) and ``rng_seed`` to allow for
+            reproducible results.
+
+            In case ``rng_seed`` is provided, the random number generator is
+            reset and seeded with this value, ensuring reproducible creation
+            of the grid.
+
 
     Raises
     ------
@@ -401,7 +560,7 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
                 amplitude:
                   lhs_range: [2, 8]
               lhs:
-                points = 7
+                points: 7
           result: fitted_gaussian
 
     In this particular case, you define your model specifying position and
@@ -409,6 +568,133 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
     to vary, keeping position and width fixed at the given values.
     Furthermore, a range for the LHS for this parameter is provided, as well
     as the number of points sampled per dimension of the Latin Hypercube.
+
+    Only those fitting parameters having set the ``lhs_range`` parameter
+    will be used for sampling. All other parameters will be used with their
+    starting values as defined:
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          output: model
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: LHSFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  lhs_range: [2, 8]
+                position:
+                  start: 2
+                  range: [0, 4]
+              lhs:
+                points: 7
+          result: fitted_gaussian
+
+    Here, only the ``amplitude`` parameter will be sampled (in this
+    particular case resulting in a 1D Latin Hypercube), while for each of
+    the grid points, the ``position`` parameter is set as given.
+
+    Sometimes the grid created by the LHS should be reproducible. In this
+    case, provide a seed for the random number generator used internally:
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          output: model
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: LHSFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  lhs_range: [2, 8]
+              lhs:
+                points: 7
+                rng_seed: 42
+          result: fitted_gaussian
+
+    Similarly, if the points should be centred within the multi-dimensional
+    grid, set the ``centered`` property accordingly:
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          output: model
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: LHSFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  lhs_range: [2, 8]
+              lhs:
+                points: 7
+                centered: true
+          result: fitted_gaussian
+
+    While the default algorithm settings are quite sensible as a starting
+    point, you can explicitly set the method and its parameters. Which
+    parameters can be set depends on the method chosen, for details refer to
+    the documentation of the underlying :mod:`scipy.optimize` module. The
+    following example shows how to change the algorithm to ``least_squares``
+    (using a Trust Region Reflective method) and to set the tolerance for
+    termination by the change of the independent variables (``xtol`` parameter):
+
+    .. code-block:: yaml
+
+        - kind: model
+          type: Gaussian
+          properties:
+            parameters:
+              position: 1.5
+              width: 0.5
+          from_dataset: dataset
+          output: model
+          result: gaussian_model
+
+        - kind: fitpy.singleanalysis
+          type: LHSFit
+          properties:
+            model: gaussian_model
+            parameters:
+              fit:
+                amplitude:
+                  lhs_range: [2, 8]
+              lhs:
+                points: 7
+              algorithm:
+                method: least_squares
+                parameters:
+                  xtol: 1e-6
+          result: fitted_gaussian
 
     """
 
@@ -423,7 +709,11 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
             'description': '',
             'parameters': {},
         }
-        self.parameters['lhs'] = {'points': 1}
+        self.parameters['lhs'] = {
+            'points': 1,
+            'centered': False,
+            'rng_seed': None,
+        }
         self.dataset_type = 'fitpy.dataset.CalculatedDatasetLHS'
 
         self._method_descriptions = {
