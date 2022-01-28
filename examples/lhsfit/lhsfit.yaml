@@ -1,0 +1,98 @@
+format:
+  type: ASpecD recipe
+  version: '0.2'
+
+settings:
+  autosave_plots: false
+
+tasks:
+  # Create "dataset" to fit model to
+  - kind: model
+    type: Zeros
+    properties:
+      parameters:
+        shape: 1001
+        range: [-10, 10]
+    result: dummy
+    comment: >
+        Create a dummy model.
+  - kind: model
+    type: Gaussian
+    from_dataset: dummy
+    properties:
+      parameters:
+        position: 2
+      label: Random spectral line
+    comment: >
+        Create a simple Gaussian line.
+    result: dataset
+  - kind: processing
+    type: Noise
+    properties:
+      parameters:
+        amplitude: 0.2
+    apply_to: dataset
+    comment: >
+        Add a bit of noise.
+  - kind: singleplot
+    type: SinglePlotter1D
+    properties:
+      filename: dataset2fit.pdf
+    apply_to: dataset
+    comment: >
+        Just to be on the safe side, plot data of created "dataset"
+
+  # Now for the actual fitting: (i) create model, (ii) fit to data
+  - kind: model
+    type: Gaussian
+    from_dataset: dataset
+    output: model
+    result: gaussian_model
+
+  - kind: fitpy.singleanalysis
+    type: LHSFit
+    properties:
+      model: gaussian_model
+      parameters:
+        fit:
+          position:
+            lhs_range: [-8, 8]
+        lhs:
+          points: 70
+    result: fitted_gaussian
+    apply_to: dataset
+
+  # Plot result
+  - kind: fitpy.singleplot
+    type: SinglePlotter1D
+    properties:
+      filename: fit_result.pdf
+    apply_to: fitted_gaussian
+
+  # Extract statistics and plot them
+  - kind: fitpy.singleanalysis
+    type: ExtractLHSStatistics
+    properties:
+      parameters:
+        criterion: reduced_chi_square
+    result: reduced_chi_squares
+    apply_to: fitted_gaussian
+
+  - kind: singleplot
+    type: SinglePlotter1D
+    properties:
+      properties:
+        drawing:
+          marker: 'o'
+          linestyle: 'none'
+      filename: 'reduced_chi_squares.pdf'
+    apply_to: reduced_chi_squares
+
+  # Create report
+  - kind: fitpy.report
+    type: LaTeXLHSFitReporter
+    properties:
+        template: lhsfit.tex
+        filename: report.tex
+    compile: true
+    apply_to: fitted_gaussian

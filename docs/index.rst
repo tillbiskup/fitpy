@@ -16,6 +16,14 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: Examples:
+   :hidden:
+
+   examples/index
+   examples/list
+
+.. toctree::
+   :maxdepth: 2
    :caption: Developers:
    :hidden:
 
@@ -69,7 +77,7 @@ Making use of the concept of **recipe-driven data analysis**, actual fitting **n
         result: fitted_gaussian
 
 
-For more general information on the FitPy framework see its `Homepage <https://www.fitpy.de/>`_, and for how to use it, carry on reading. Interested in more real-live examples? Check out the :ref:`use cases section <use_cases>`.
+For more general information on the FitPy framework see its `Homepage <https://www.fitpy.de/>`_, and for how to use it, carry on reading. Interested in more real-live examples? Check out the :ref:`use cases section <use_cases>` and the growing :doc:`list of examples <examples/index>` providing complete recipes for different needs.
 
 
 

@@ -1,0 +1,85 @@
+format:
+  type: ASpecD recipe
+  version: '0.2'
+
+settings:
+  autosave_plots: false
+
+tasks:
+  # Create "dataset" to fit model to
+  - kind: model
+    type: Zeros
+    properties:
+      parameters:
+        shape: 1001
+        range: [-10, 10]
+    result: dummy
+    comment: >
+        Create a dummy model.
+  - kind: model
+    type: Gaussian
+    from_dataset: dummy
+    properties:
+      parameters:
+        position: 2
+      label: Random spectral line
+    comment: >
+        Create a simple Gaussian line.
+    result: dataset
+  - kind: processing
+    type: Noise
+    properties:
+      parameters:
+        amplitude: 0.2
+    apply_to: dataset
+    comment: >
+        Add a bit of noise.
+  - kind: singleplot
+    type: SinglePlotter1D
+    properties:
+      filename: dataset2fit.pdf
+    apply_to: dataset
+    comment: >
+        Just to be on the safe side, plot data of created "dataset"
+
+  # Now for the actual fitting: (i) create model, (ii) fit to data
+  - kind: model
+    type: Gaussian
+    from_dataset: dataset
+    output: model
+    result: gaussian_model
+
+  - kind: fitpy.singleanalysis
+    type: SimpleFit
+    properties:
+      model: gaussian_model
+      parameters:
+        fit:
+          position:
+            start: 1
+            range: [0, 5]
+        algorithm:
+          method: least_squares
+          parameters:
+            ftol: 1e-6
+            xtol: 1e-6
+    result: fitted_gaussian
+    apply_to: dataset
+
+  # Plot result
+  - kind: fitpy.singleplot
+    type: SinglePlotter1D
+    properties:
+      filename: fit_result.pdf
+      parameters:
+        show_legend: true
+    apply_to: fitted_gaussian
+
+  # Create report
+  - kind: fitpy.report
+    type: LaTeXFitReporter
+    properties:
+        template: simplefit.tex
+        filename: report.tex
+    compile: true
+    apply_to: fitted_gaussian
