@@ -20,6 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 import os
+import subprocess
 
 with open(os.path.join(os.path.dirname(__file__), '..', 'VERSION')) as \
         version_file:
@@ -52,6 +53,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx_multiversion',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -89,6 +91,15 @@ autodoc_default_options = {
     'private-members': False,
     'show-inheritance': True,
 }
+
+# Multiversion configuration
+smv_branch_whitelist = r'^master.*$'
+smv_tag_whitelist = r'^v\d+\.\d+$'
+smv_released_pattern = r'^refs/tags/v\d+\.\d+$'
+
+tag = subprocess.run("git describe --tags `git rev-list --tags "
+                     "--max-count=1`", shell=True, capture_output=True)
+smv_latest_version = tag.stdout.decode().strip()
 
 # -- Options for HTML output -------------------------------------------------
 

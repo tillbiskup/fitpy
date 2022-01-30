@@ -8,7 +8,7 @@ This page contains a summary of changes between the official FitPy releases. Onl
 Version 0.1.0
 =============
 
-Not yet released
+Released 2022-01-30
 
 * First public release
 
