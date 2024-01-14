@@ -19,3 +19,10 @@ pylint:
     max-attributes: 15
     max-module-lines: 1500
 
+pycodestyle:
+  disable:
+    - E203
+    - W503
+  enable:
+    - W504
+
