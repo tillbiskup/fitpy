@@ -28,7 +28,7 @@ with open(
     release_ = version_file.read().strip()
 
 project = "FitPy"
-copyright = "2019–22, Till Biskup"
+copyright = "2019–24, Till Biskup"
 author = "Till Biskup"
 
 # The short X.Y version

@@ -46,4 +46,4 @@ While in the recipe, the output format has been set to PDF, for rendering here t
 
 .. figure:: ./lhsfit-reduced_chi_squares.png
 
-    **Robustness of the fit.** As generally fitting is a minimisation problem, the lower the value of the respective criterion, the better the fit. For a rough fitness landscape, you will likely observe several *plateaus*, and ideally a visible plateau at the very left, representing the lowest (hopefully global) minimum..
+    **Robustness of the fit.** As generally fitting is a minimisation problem, the lower the value of the respective criterion, the better the fit. For a rough fitness landscape, you will likely observe several *plateaus*, and ideally a visible plateau at the very left, representing the lowest (hopefully global) minimum.

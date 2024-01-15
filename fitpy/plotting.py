@@ -72,7 +72,7 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
         of the :class:`fitpy.plotting.SinglePlot1DProperties` and
         :class:`aspecd.plotting.SinglePlot1DProperties` classes.
 
-    drawing : :class:`matplotlib.artist.Artist`
+    data_drawing : :class:`matplotlib.artist.Artist`
         Actual graphical representation of the data
 
 
