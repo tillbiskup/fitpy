@@ -42,7 +42,7 @@ setuptools.setup(
         "Topic :: Scientific/Engineering",
     ],
     install_requires=[
-        'aspecd>0.6.4',
+        'aspecd>0.9.0',
         'numpy',
         'scipy>=1.7.0',
         'lmfit',

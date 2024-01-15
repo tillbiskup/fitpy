@@ -33,6 +33,7 @@ class TestSinglePlotter1D(unittest.TestCase):
             dataset.plot(self.plotter)
 
     def test_apply_to_dataset_with_residual(self):
+        self.create_dataset()
         self.dataset.plot(self.plotter)
 
     def test_apply_to_2D_dataset_with_residual_raises(self):
@@ -49,7 +50,7 @@ class TestSinglePlotter1D(unittest.TestCase):
     def test_plot_shows_model_and_original_data(self):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
-        self.assertListEqual(list(plot.data.get_data()[1]),
+        self.assertListEqual(list(plot.data_drawing.get_data()[1]),
                              list(self.dataset.data.data +
                                   self.dataset.data.residual))
 
@@ -69,12 +70,14 @@ class TestSinglePlotter1D(unittest.TestCase):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
         properties = fitpy.plotting.SinglePlot1DProperties()
-        self.assertEqual(properties.data.label, plot.data.get_label())
+        self.assertEqual(properties.data.label,
+                         plot.data_drawing.get_label())
 
     def test_plot_sets_color_of_data(self):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
-        self.assertEqual(plot.properties.data.color, plot.data.get_color())
+        self.assertEqual(plot.properties.drawing.color,
+                         plot.drawing.get_color())
 
         # plt.show()
 
