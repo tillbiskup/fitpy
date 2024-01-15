@@ -16,7 +16,7 @@ Fixes
 
 * Changes in :class:`fitpy.plotting.SinglePlotter1D` to make it work with ASpecD >= 0.9.0.
 
-  **Important note:** This version of FitPy requires ASpecD >= 0.9.1 to work.
+  **Important note:** This version of FitPy requires **ASpecD >= 0.9.1** to work.
 
 
 Version 0.1.0
