@@ -1,3 +1,5 @@
+import contextlib
+import io
 import os
 import unittest
 
@@ -60,7 +62,8 @@ class TestLaTeXFitReporter(unittest.TestCase):
         self.reporter.context["dataset"] = self.dataset.to_dict()
         self.reporter.filename = self.filename
         self.reporter.create()
-        self.reporter.compile()
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.reporter.compile()
         self.assertTrue(os.path.exists(self.result))
 
     def test_render_with_dataset_creates_figure(self):
@@ -100,7 +103,8 @@ class TestLaTeXFitReporter(unittest.TestCase):
         self.reporter.context["dataset"] = self.dataset.to_dict()
         self.reporter.filename = self.filename
         self.reporter.create()
-        self.reporter.compile()
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.reporter.compile()
         self.assertTrue(os.path.exists(self.result))
 
 
@@ -158,7 +162,8 @@ class TestLaTeXLHSFitReporter(unittest.TestCase):
         self.reporter.context["dataset"] = self.dataset.to_dict()
         self.reporter.filename = self.filename
         self.reporter.create()
-        self.reporter.compile()
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.reporter.compile()
         self.assertTrue(os.path.exists(self.result))
 
     def test_render_with_dataset_creates_lhs_figure(self):
@@ -199,5 +204,6 @@ class TestLaTeXLHSFitReporter(unittest.TestCase):
         self.reporter.context["dataset"] = self.dataset.to_dict()
         self.reporter.filename = self.filename
         self.reporter.create()
-        self.reporter.compile()
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.reporter.compile()
         self.assertTrue(os.path.exists(self.result))
