@@ -5,6 +5,26 @@ Changelog
 This page contains a summary of changes between the official FitPy releases. Only the biggest changes are listed here. A complete and detailed log of all changes is available through the `GitHub Repository Browser <https://github.com/tillbiskup/fitpy/commits/master>`_.
 
 
+Version 0.1.1
+=============
+
+Released 2024-01-15
+
+
+Fixes
+-----
+
+* Changes in :class:`fitpy.plotting.SinglePlotter1D` to make it work with ASpecD >= 0.9.0.
+
+  **Important note:** This version of FitPy requires **ASpecD >= 0.9.1** to work.
+
+
+Changes
+-------
+
+* Use Black for automatic code formatting
+
+
 Version 0.1.0
 =============
 
