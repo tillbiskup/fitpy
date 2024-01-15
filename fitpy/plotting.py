@@ -118,16 +118,17 @@ class SinglePlotter1D(aspecd.plotting.SinglePlotter1D):
             `True` if successful, `False` otherwise.
 
         """
-        return hasattr(data, 'residual') and data.data.ndim == 1
+        return hasattr(data, "residual") and data.data.ndim == 1
 
     def _create_plot(self):
         plot_function = getattr(self.axes, self.type)
-        self.data_drawing, = plot_function(self.data.axes[0].values,
-                                           self.data.residual +
-                                           self.data.data,
-                                           label=self.properties.data.label)
+        (self.data_drawing,) = plot_function(
+            self.data.axes[0].values,
+            self.data.residual + self.data.data,
+            label=self.properties.data.label,
+        )
         if not self.properties.drawing.label:
-            self.properties.drawing.label = 'fit'
+            self.properties.drawing.label = "fit"
         super()._create_plot()
 
 
@@ -157,8 +158,8 @@ class SinglePlot1DProperties(aspecd.plotting.SinglePlot1DProperties):
     def __init__(self):
         super().__init__()
         self.data = aspecd.plotting.LineProperties()
-        self.data.label = 'data'
-        self.data.color = '#999'
+        self.data.label = "data"
+        self.data.color = "#999"
 
     def apply(self, plotter=None):
         """

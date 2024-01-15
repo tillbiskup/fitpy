@@ -423,57 +423,63 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
 
     def __init__(self):
         super().__init__()
-        self.description = 'Fit model to data of dataset'
+        self.description = "Fit model to data of dataset"
         self.model = None
-        self.parameters['fit'] = {}
-        self.parameters['algorithm'] = {
-            'method': 'leastsq',
-            'description': '',
-            'parameters': {},
+        self.parameters["fit"] = {}
+        self.parameters["algorithm"] = {
+            "method": "leastsq",
+            "description": "",
+            "parameters": {},
         }
-        self.dataset_type = 'fitpy.dataset.CalculatedDataset'
+        self.dataset_type = "fitpy.dataset.CalculatedDataset"
 
         self._fit_parameters = lmfit.Parameters()
         self._fit_result = None
         self._method_descriptions = {
-            'leastsq': 'Least-Squares minimization, using '
-                       'Levenberg-Marquardt method',
-            'least_squares': 'Least-Squares minimization, using Trust Region '
-                             'Reflective method',
+            "leastsq": "Least-Squares minimization, using "
+            "Levenberg-Marquardt method",
+            "least_squares": "Least-Squares minimization, using Trust Region "
+            "Reflective method",
         }
 
     def _sanitise_parameters(self):
-        if self.parameters['algorithm']['method'] \
-                not in self._method_descriptions:
+        if (
+            self.parameters["algorithm"]["method"]
+            not in self._method_descriptions
+        ):
             message = 'Unknown method "{}"'.format(  # noqa
-                self.parameters['algorithm']['method'])
+                self.parameters["algorithm"]["method"]
+            )
             raise ValueError(message)
 
     def _perform_task(self):
         self.result = self.create_dataset()
         self.model.from_dataset(self.dataset)
 
-        self.parameters['algorithm']['description'] = \
-            self._method_descriptions[self.parameters['algorithm']['method']]
+        self.parameters["algorithm"][
+            "description"
+        ] = self._method_descriptions[self.parameters["algorithm"]["method"]]
 
         self._prepare_fit_parameters()
-        minimiser = lmfit.minimizer.Minimizer(self._calculate_residual,
-                                              self._fit_parameters)
-        self._fit_result = \
-            minimiser.minimize(method=self.parameters['algorithm']['method'],
-                               params=self._fit_parameters,
-                               **self.parameters['algorithm']['parameters'])
+        minimiser = lmfit.minimizer.Minimizer(
+            self._calculate_residual, self._fit_parameters
+        )
+        self._fit_result = minimiser.minimize(
+            method=self.parameters["algorithm"]["method"],
+            params=self._fit_parameters,
+            **self.parameters["algorithm"]["parameters"]
+        )
         self._assign_fitted_model_to_result()
 
     def _prepare_fit_parameters(self):
         for key, value in self.model.parameters.items():
             parameter = lmfit.Parameter(name=key)
-            if key in self.parameters['fit']:
-                parameter.set(value=self.parameters['fit'][key]['start'])
+            if key in self.parameters["fit"]:
+                parameter.set(value=self.parameters["fit"][key]["start"])
                 parameter.set(vary=True)
-                if 'range' in self.parameters['fit'][key]:
-                    parameter.set(min=self.parameters['fit'][key]['range'][0])
-                    parameter.set(max=self.parameters['fit'][key]['range'][1])
+                if "range" in self.parameters["fit"][key]:
+                    parameter.set(min=self.parameters["fit"][key]["range"][0])
+                    parameter.set(max=self.parameters["fit"][key]["range"][1])
             else:
                 parameter.set(value=value)
                 parameter.set(vary=False)
@@ -491,7 +497,8 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         self.result.data.residual = self._fit_result.residual
         self.result.metadata.model.from_model(self.model)
         self.result.metadata.result.from_lmfit_minimizer_result(
-            self._fit_result)
+            self._fit_result
+        )
         self.result.metadata.data.from_dataset(self.dataset)
 
 
@@ -765,27 +772,28 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
 
     def __init__(self):
         super().__init__()
-        self.description = 'Fit model to data of dataset ' \
-                           'with LHS of starting conditions'
+        self.description = (
+            "Fit model to data of dataset with LHS of starting conditions"
+        )
         self.model = None
-        self.parameters['fit'] = {}
-        self.parameters['algorithm'] = {
-            'method': 'leastsq',
-            'description': '',
-            'parameters': {},
+        self.parameters["fit"] = {}
+        self.parameters["algorithm"] = {
+            "method": "leastsq",
+            "description": "",
+            "parameters": {},
         }
-        self.parameters['lhs'] = {
-            'points': 1,
-            'centered': False,
-            'rng_seed': None,
+        self.parameters["lhs"] = {
+            "points": 1,
+            "centered": False,
+            "rng_seed": None,
         }
-        self.dataset_type = 'fitpy.dataset.CalculatedDatasetLHS'
+        self.dataset_type = "fitpy.dataset.CalculatedDatasetLHS"
 
         self._method_descriptions = {
-            'leastsq': 'Least-Squares minimization, using '
-                       'Levenberg-Marquardt method',
-            'least_squares': 'Least-Squares minimization, using Trust Region '
-                             'Reflective method',
+            "leastsq": "Least-Squares minimization, using "
+            "Levenberg-Marquardt method",
+            "least_squares": "Least-Squares minimization, using Trust Region "
+            "Reflective method",
         }
         self._lhs_parameters = None
         self._lhs_samples = None
@@ -794,18 +802,22 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
         self._fit_results = []
 
     def _sanitise_parameters(self):
-        if self.parameters['algorithm']['method'] not in \
-                self._method_descriptions:
+        if (
+            self.parameters["algorithm"]["method"]
+            not in self._method_descriptions
+        ):
             message = 'Unknown method "{}"'.format(  # noqa
-                self.parameters['algorithm']['method'])
+                self.parameters["algorithm"]["method"]
+            )
             raise ValueError(message)
 
     def _perform_task(self):
         self.result = self.create_dataset()
         self.model.from_dataset(self.dataset)
 
-        self.parameters['algorithm']['description'] = \
-            self._method_descriptions[self.parameters['algorithm']['method']]
+        self.parameters["algorithm"][
+            "description"
+        ] = self._method_descriptions[self.parameters["algorithm"]["method"]]
 
         self._create_lhs_parameters()
         self._create_lhs_samples()
@@ -817,49 +829,54 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
 
     def _create_lhs_parameters(self):
         self._lhs_parameters = {
-            key: value for key, value in self.parameters['fit'].items()
-            if 'lhs_range' in value
+            key: value
+            for key, value in self.parameters["fit"].items()
+            if "lhs_range" in value
         }
 
     def _create_lhs_samples(self):
         lhs_dimensions = len(self._lhs_parameters)
         sampler = qmc.LatinHypercube(d=lhs_dimensions)
-        for key, value in self.parameters['lhs'].items():
+        for key, value in self.parameters["lhs"].items():
             if hasattr(sampler, key):
                 setattr(sampler, key, value)
         if sampler.rng_seed:
             sampler.reset()
-        self._lhs_samples = sampler.random(self.parameters['lhs']['points'])
+        self._lhs_samples = sampler.random(self.parameters["lhs"]["points"])
         self._lhs_discrepancy = qmc.discrepancy(self._lhs_samples)
 
         lower_bounds = []
         upper_bounds = []
         for value in self._lhs_parameters.values():
-            lower_bounds.append(value['lhs_range'][0])
-            upper_bounds.append(value['lhs_range'][1])
-        self._lhs_samples = \
-            qmc.scale(self._lhs_samples, lower_bounds, upper_bounds)
+            lower_bounds.append(value["lhs_range"][0])
+            upper_bounds.append(value["lhs_range"][1])
+        self._lhs_samples = qmc.scale(
+            self._lhs_samples, lower_bounds, upper_bounds
+        )
 
     def _create_fit_parameters(self):
         param_samples = {}
         for idx, key in enumerate(self._lhs_parameters.keys()):
             param_samples[key] = self._lhs_samples[:, idx]
-        for point in range(self.parameters['lhs']['points']):
+        for point in range(self.parameters["lhs"]["points"]):
             self._fit_parameters.append(lmfit.Parameters())
             for key, value in self.model.parameters.items():
                 parameter = lmfit.Parameter(name=key)
-                if key in self.parameters['fit']:
-                    if 'lhs_range' in self.parameters['fit'][key]:
+                if key in self.parameters["fit"]:
+                    if "lhs_range" in self.parameters["fit"][key]:
                         parameter.set(value=param_samples[key][point])
                     else:
                         parameter.set(
-                            value=self.parameters['fit'][key]['start'])
+                            value=self.parameters["fit"][key]["start"]
+                        )
                     parameter.set(vary=True)
-                    if 'range' in self.parameters['fit'][key]:
+                    if "range" in self.parameters["fit"][key]:
                         parameter.set(
-                            min=self.parameters['fit'][key]['range'][0])
+                            min=self.parameters["fit"][key]["range"][0]
+                        )
                         parameter.set(
-                            max=self.parameters['fit'][key]['range'][1])
+                            max=self.parameters["fit"][key]["range"][1]
+                        )
                 else:
                     parameter.set(value=value)
                     parameter.set(vary=False)
@@ -871,13 +888,14 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
         return residuals
 
     def _perform_lhs_fit(self):
-        for point in range(self.parameters['lhs']['points']):
-            minimiser = lmfit.minimizer.Minimizer(self._calculate_residual,
-                                                  self._fit_parameters[point])
+        for point in range(self.parameters["lhs"]["points"]):
+            minimiser = lmfit.minimizer.Minimizer(
+                self._calculate_residual, self._fit_parameters[point]
+            )
             fit_result = minimiser.minimize(
-                method=self.parameters['algorithm']['method'],
+                method=self.parameters["algorithm"]["method"],
                 params=self._fit_parameters[point],
-                **self.parameters['algorithm']['parameters']
+                **self.parameters["algorithm"]["parameters"]
             )
             self._fit_results.append(fit_result)
 
@@ -894,7 +912,8 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
         self.result.metadata.result.from_lmfit_minimizer_result(best_fit)
         self.result.metadata.data.from_dataset(self.dataset)
         self.result.metadata.lhs.from_lmfit_minimizer_results(
-            self._fit_results)
+            self._fit_results
+        )
         self.result.metadata.lhs.samples = self._lhs_samples
         self.result.metadata.lhs.discrepancy = self._lhs_discrepancy
 
@@ -989,14 +1008,14 @@ class ExtractLHSStatistics(aspecd.analysis.SingleAnalysisStep):
 
     def __init__(self):
         super().__init__()
-        self.description = 'Extract LHS statistics from calculated dataset'
-        self.parameters['criterion'] = 'chi_square'
+        self.description = "Extract LHS statistics from calculated dataset"
+        self.parameters["criterion"] = "chi_square"
 
         self._criterion_names = {
-            'chi_square': 'chi square',
-            'reduced_chi_square': 'reduced chi square',
-            'akaike_information_criterion': 'Akaike information criterion',
-            'bayesian_information_criterion': 'Bayesian information criterion',
+            "chi_square": "chi square",
+            "reduced_chi_square": "reduced chi square",
+            "akaike_information_criterion": "Akaike information criterion",
+            "bayesian_information_criterion": "Bayesian information criterion",
         }
 
     @staticmethod
@@ -1009,14 +1028,17 @@ class ExtractLHSStatistics(aspecd.analysis.SingleAnalysisStep):
             `True` if successful, `False` otherwise.
 
         """
-        return hasattr(dataset.metadata, 'lhs')
+        return hasattr(dataset.metadata, "lhs")
 
     def _perform_task(self):
         self.result = self.create_dataset()
-        criterion = [getattr(result, self.parameters['criterion'])
-                     for result in self.dataset.metadata.lhs.results]
+        criterion = [
+            getattr(result, self.parameters["criterion"])
+            for result in self.dataset.metadata.lhs.results
+        ]
         criterion.sort()
         self.result.data.data = np.asarray(criterion)
-        self.result.data.axes[0].quantity = 'index of samples'
-        self.result.data.axes[1].quantity = \
-            self._criterion_names[self.parameters['criterion']]
+        self.result.data.axes[0].quantity = "index of samples"
+        self.result.data.axes[1].quantity = self._criterion_names[
+            self.parameters["criterion"]
+        ]

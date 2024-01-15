@@ -87,7 +87,7 @@ class Data(aspecd.dataset.Data):
     def __init__(self):
         super().__init__()
         self._residual = self._data
-        self._include_in_to_dict.append('residual')
+        self._include_in_to_dict.append("residual")
 
     @property
     def residual(self):
@@ -103,7 +103,7 @@ class Data(aspecd.dataset.Data):
     @residual.setter
     def residual(self, residual):
         if residual.shape != self.data.shape:
-            raise ValueError('Shapes of data and residual need to match.')
+            raise ValueError("Shapes of data and residual need to match.")
         self._residual = residual
 
 
@@ -201,7 +201,7 @@ class Model(aspecd.metadata.Metadata):
 
     def __init__(self):
         super().__init__()
-        self.type = ''
+        self.type = ""
         self.parameters = {}
 
     def from_model(self, model):
@@ -240,8 +240,8 @@ class DataMetadata(aspecd.metadata.Metadata):
 
     def __init__(self):
         super().__init__()
-        self.id = ''  # noqa
-        self.label = ''
+        self.id = ""  # noqa
+        self.label = ""
 
     def from_dataset(self, dataset):
         """
@@ -333,14 +333,14 @@ class Result(aspecd.metadata.Metadata):
         self.n_function_evaluations = 0
         self.n_variables = 0
         self.degrees_of_freedom = 0
-        self.chi_square = 0.
-        self.reduced_chi_square = 0.
-        self.akaike_information_criterion = 0.
-        self.bayesian_information_criterion = 0.
+        self.chi_square = 0.0
+        self.reduced_chi_square = 0.0
+        self.akaike_information_criterion = 0.0
+        self.bayesian_information_criterion = 0.0
         self.variable_names = []
         self.covariance_matrix = np.ndarray([0])
         self.initial_values = []
-        self.message = ''
+        self.message = ""
 
     def to_dict(self, remove_empty=False):
         """
@@ -364,8 +364,8 @@ class Result(aspecd.metadata.Metadata):
         dict_ = super().to_dict(remove_empty=remove_empty)
         if self.parameters:
             parameter_values = self.parameters.valuesdict()
-            for key in dict_['parameters'].keys():
-                dict_['parameters'][key]['value'] = parameter_values[key]
+            for key in dict_["parameters"].keys():
+                dict_["parameters"][key]["value"] = parameter_values[key]
         return dict_
 
     def from_lmfit_minimizer_result(self, result):
@@ -379,20 +379,20 @@ class Result(aspecd.metadata.Metadata):
 
         """
         mappings = {
-            'params': 'parameters',
-            'success': 'success',
-            'errorbars': 'error_bars',
-            'nfev': 'n_function_evaluations',
-            'nvarys': 'n_variables',
-            'nfree': 'degrees_of_freedom',
-            'chisqr': 'chi_square',
-            'redchi': 'reduced_chi_square',
-            'aic': 'akaike_information_criterion',
-            'bic': 'bayesian_information_criterion',
-            'var_names': 'variable_names',
-            'covar': 'covariance_matrix',
-            'init_vals': 'initial_values',
-            'message': 'message',
+            "params": "parameters",
+            "success": "success",
+            "errorbars": "error_bars",
+            "nfev": "n_function_evaluations",
+            "nvarys": "n_variables",
+            "nfree": "degrees_of_freedom",
+            "chisqr": "chi_square",
+            "redchi": "reduced_chi_square",
+            "aic": "akaike_information_criterion",
+            "bic": "bayesian_information_criterion",
+            "var_names": "variable_names",
+            "covar": "covariance_matrix",
+            "init_vals": "initial_values",
+            "message": "message",
         }
         for key, value in mappings.items():
             if hasattr(result, key):
