@@ -11,6 +11,17 @@ Version 0.2.0
 Not yet released
 
 
+Version 0.1.2
+=============
+
+Released 2024-12-01
+
+
+Fixes
+-----
+
+* Fix with metadata to_dict method
+
 
 Version 0.1.1
 =============
