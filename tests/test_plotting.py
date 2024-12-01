@@ -33,6 +33,7 @@ class TestSinglePlotter1D(unittest.TestCase):
             dataset.plot(self.plotter)
 
     def test_apply_to_dataset_with_residual(self):
+        self.create_dataset()
         self.dataset.plot(self.plotter)
 
     def test_apply_to_2D_dataset_with_residual_raises(self):
@@ -49,32 +50,37 @@ class TestSinglePlotter1D(unittest.TestCase):
     def test_plot_shows_model_and_original_data(self):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
-        self.assertListEqual(list(plot.data.get_data()[1]),
-                             list(self.dataset.data.data +
-                                  self.dataset.data.residual))
+        self.assertListEqual(
+            list(plot.data_drawing.get_data()[1]),
+            list(self.dataset.data.data + self.dataset.data.residual),
+        )
 
     def test_plot_sets_label_for_fitted_model(self):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
-        self.assertEqual('fit', plot.properties.drawing.label)
+        self.assertEqual("fit", plot.properties.drawing.label)
 
     def test_plot_with_label_set_via_properties(self):
         self.create_dataset()
-        self.plotter.properties.drawing.label = 'foo'
+        self.plotter.properties.drawing.label = "foo"
         plot = self.dataset.plot(self.plotter)
-        self.assertEqual(self.plotter.properties.drawing.label,
-                         plot.properties.drawing.label)
+        self.assertEqual(
+            self.plotter.properties.drawing.label,
+            plot.properties.drawing.label,
+        )
 
     def test_plot_sets_label_of_data(self):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
         properties = fitpy.plotting.SinglePlot1DProperties()
-        self.assertEqual(properties.data.label, plot.data.get_label())
+        self.assertEqual(properties.data.label, plot.data_drawing.get_label())
 
     def test_plot_sets_color_of_data(self):
         self.create_dataset()
         plot = self.dataset.plot(self.plotter)
-        self.assertEqual(plot.properties.data.color, plot.data.get_color())
+        self.assertEqual(
+            plot.properties.drawing.color, plot.drawing.get_color()
+        )
 
         # plt.show()
 
@@ -87,12 +93,13 @@ class TestSinglePlot1DProperties(unittest.TestCase):
         pass
 
     def test_has_data_properties(self):
-        self.assertTrue(hasattr(self.plot_properties, 'data'))
-        self.assertIsInstance(self.plot_properties.data,
-                              aspecd.plotting.LineProperties)
+        self.assertTrue(hasattr(self.plot_properties, "data"))
+        self.assertIsInstance(
+            self.plot_properties.data, aspecd.plotting.LineProperties
+        )
 
     def test_data_property_has_sensible_default_label(self):
-        self.assertEqual('data', self.plot_properties.data.label)
+        self.assertEqual("data", self.plot_properties.data.label)
 
     def test_data_property_has_sensible_default_color(self):
-        self.assertEqual('#999', self.plot_properties.data.color)
+        self.assertEqual("#999", self.plot_properties.data.color)

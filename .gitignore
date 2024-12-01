@@ -23,8 +23,6 @@
 
 # Sphinx templates and build
 docs/_build
-docs/_static
-docs/_templates
 
 # Examples section
 /examples/**/*-[0-9]*T[0-9]*.yaml

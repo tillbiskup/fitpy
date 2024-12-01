@@ -8,6 +8,7 @@ information always on the same place, allowing for easily comparing
 different fits.
 
 """
+
 import copy
 import os.path
 
@@ -62,7 +63,7 @@ class LaTeXFitReporter(aspecd.report.LaTeXReporter):
 
     def __init__(self):
         super().__init__()
-        self.package = 'fitpy'
+        self.package = "fitpy"
         self.dataset = None
 
     def _render(self):
@@ -73,17 +74,17 @@ class LaTeXFitReporter(aspecd.report.LaTeXReporter):
     def _create_figure(self):
         dataset = copy.deepcopy(self.dataset)
         plotter = fitpy.plotting.SinglePlotter1D()
-        plotter.parameters['tight_layout'] = True
-        plotter.parameters['tight'] = 'x'
-        plotter.parameters['show_legend'] = True
+        plotter.parameters["tight_layout"] = True
+        plotter.parameters["tight"] = "x"
+        plotter.parameters["show_legend"] = True
         basename, _ = os.path.splitext(self.filename)
-        figure_filename = "".join([basename, '-fig', '.pdf'])
+        figure_filename = "".join([basename, "-fig", ".pdf"])
         saver = aspecd.plotting.Saver()
         saver.filename = figure_filename
         plot = dataset.plot(plotter)
         plot.save(saver)
 
-        self.context['figure_filename'] = figure_filename
+        self.context["figure_filename"] = figure_filename
         self.includes.append(figure_filename)
 
 
@@ -136,15 +137,15 @@ class LaTeXLHSFitReporter(LaTeXFitReporter):
         analysis = fitpy.analysis.ExtractLHSStatistics()
         analysis = dataset.analyse(analysis)
         plotter = aspecd.plotting.SinglePlotter1D()
-        plotter.parameters['tight_layout'] = True
-        plotter.properties.drawing.linestyle = ''
-        plotter.properties.drawing.marker = 'o'
+        plotter.parameters["tight_layout"] = True
+        plotter.properties.drawing.linestyle = ""
+        plotter.properties.drawing.marker = "o"
         basename, _ = os.path.splitext(self.filename)
-        figure_filename = "".join([basename, '-lhsfig', '.pdf'])
+        figure_filename = "".join([basename, "-lhsfig", ".pdf"])
         saver = aspecd.plotting.Saver()
         saver.filename = figure_filename
         plot = analysis.result.plot(plotter)
         plot.save(saver)
 
-        self.context['lhs_figure_filename'] = figure_filename
+        self.context["lhs_figure_filename"] = figure_filename
         self.includes.append(figure_filename)
