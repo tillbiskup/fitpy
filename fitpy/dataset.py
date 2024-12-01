@@ -18,6 +18,7 @@ plotters available in the :mod:`fitpy.plotting` module to check for their
 applicability.
 
 """
+
 import copy
 
 import aspecd.dataset

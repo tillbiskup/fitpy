@@ -5,7 +5,7 @@ Changelog
 This page contains a summary of changes between the official FitPy releases. Only the biggest changes are listed here. A complete and detailed log of all changes is available through the `GitHub Repository Browser <https://github.com/tillbiskup/fitpy/commits/master>`_.
 
 
-Version 0.2.ß
+Version 0.2.0
 =============
 
 Not yet released

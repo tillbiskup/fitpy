@@ -8,6 +8,7 @@ information always on the same place, allowing for easily comparing
 different fits.
 
 """
+
 import copy
 import os.path
 

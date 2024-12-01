@@ -456,9 +456,9 @@ class SimpleFit(aspecd.analysis.SingleAnalysisStep):
         self.result = self.create_dataset()
         self.model.from_dataset(self.dataset)
 
-        self.parameters["algorithm"][
-            "description"
-        ] = self._method_descriptions[self.parameters["algorithm"]["method"]]
+        self.parameters["algorithm"]["description"] = (
+            self._method_descriptions[self.parameters["algorithm"]["method"]]
+        )
 
         self._prepare_fit_parameters()
         minimiser = lmfit.minimizer.Minimizer(
@@ -815,9 +815,9 @@ class LHSFit(aspecd.analysis.SingleAnalysisStep):
         self.result = self.create_dataset()
         self.model.from_dataset(self.dataset)
 
-        self.parameters["algorithm"][
-            "description"
-        ] = self._method_descriptions[self.parameters["algorithm"]["method"]]
+        self.parameters["algorithm"]["description"] = (
+            self._method_descriptions[self.parameters["algorithm"]["method"]]
+        )
 
         self._create_lhs_parameters()
         self._create_lhs_samples()

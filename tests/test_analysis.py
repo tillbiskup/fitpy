@@ -215,6 +215,8 @@ class TestLHSFit(unittest.TestCase):
     def test_analysis_returns_calculated_dataset(self):
         self.create_dataset()
         self.fit.model = self.model
+        self.fit.parameters["fit"] = {"position": {"lhs_range": [-8, 8]}}
+        self.fit.parameters["lhs"] = {"points": 5}
         fit = self.dataset.analyse(self.fit)
         self.assertIsInstance(fit.result, fitpy.dataset.CalculatedDatasetLHS)
 
