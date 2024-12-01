@@ -368,6 +368,10 @@ class Result(aspecd.metadata.Metadata):
                 dict_["parameters"][key]["value"] = parameter_values[key]
         return dict_
 
+    @staticmethod
+    def _return_copy(dictionary):
+        return copy.deepcopy(dictionary)
+
     def from_lmfit_minimizer_result(self, result):
         """
         Set attributes from :class:`lmfit.minimizer.MinimizerResult`.
